@@ -31,4 +31,51 @@ class ProductSizes(models.Model):
     price = models.IntegerField(verbose_name=u'Цена за объём')
 
     def __unicode__(self):
-        return self.title + ' - ' + str(self.price)
+        return self.title + 'г - ' + str(self.price) + ' сом'
+
+
+class PotatoProduct(models.Model):
+    class Meta:
+        db_table = 'potato_product'
+        verbose_name = u'Картофель'
+        verbose_name_plural = u'Картофели'
+
+    title = models.CharField(max_length=255, verbose_name=u'Наименование')
+    description = models.TextField(max_length=100, verbose_name=u'Описание')
+    sizes = models.ManyToManyField('ProductSizes', verbose_name=u'Объёмы')
+    preview = models.ImageField(upload_to='potato_products', verbose_name=u'Изображение')
+
+    def __unicode__(self):
+        return self.title
+
+
+class SaladeProduct(models.Model):
+    class Meta:
+        db_table = 'salade_product'
+        verbose_name_plural = 'Салаты'
+        verbose_name = 'Салат'
+
+    title = models.CharField(verbose_name='Название', max_length=255, unique=False, null=False)
+    description = models.TextField(verbose_name='Описание', null=False)
+    preview = models.ImageField(verbose_name='Изображение', upload_to='salade_products', null=False)
+    price = models.IntegerField(verbose_name='Цена', null=False)
+
+    def __unicode__(self):
+        return self.title
+
+
+class DrinkingProduct(models.Model):
+    class Meta:
+        db_table = 'drinking_product'
+        verbose_name_plural = 'Напитки'
+        verbose_name = 'Напиток'
+
+    title = models.CharField(verbose_name='Название', max_length=255, unique=False, null=False)
+    description = models.TextField(verbose_name='Описание', null=False)
+    preview = models.ImageField(verbose_name='Изображение', upload_to='drinking_products', null=False)
+    price = models.IntegerField(verbose_name='Цена', null=False)
+
+    def __unicode__(self):
+        return self.title
+
+

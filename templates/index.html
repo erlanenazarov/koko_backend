@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Koko-Chicken</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
     <link rel="apple-touch-icon" sizes="57x57" href="{% static 'favicon/apple-icon-57x57.png' %}">
     <link rel="apple-touch-icon" sizes="60x60" href="{% static 'favicon/apple-icon-60x60.png' %}">
     <link rel="apple-touch-icon" sizes="72x72" href="{% static 'favicon/apple-icon-72x72.png' %}">
@@ -14,7 +14,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="{% static 'favicon/apple-icon-144x144.png' %}">
     <link rel="apple-touch-icon" sizes="152x152" href="{% static 'favicon/apple-icon-152x152.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-icon-180x180.png' %}">
-    <link rel="icon" type="image/png" sizes="192x192"  href="{% static 'favicon/android-icon-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'favicon/android-icon-192x192.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon/favicon-96x96.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
@@ -22,623 +22,485 @@
     <meta name="msapplication-TileColor" content="rgba(0,0,0,0)">
     <meta name="msapplication-TileImage" content="{% static 'favicon/ms-icon-144x144.png' %}">
     <meta name="theme-color" content="rgba(0,0,0,0)">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
-    <div class="pre-header" id="fixed-header">
-        <div class="pre-header-center">
-            <div class="navigation-menu">
-                <ul>
-                    <li><a href="#">главная</a></li>
-                    <li><a href="#">блюды</a></li>
-                    <li><a href="#">меню</a></li>
-                    <li><a href="#">контакты</a></li>
-                </ul>
+<div class="pre-header" id="fixed-header">
+    <div class="pre-header-center">
+        <div class="navigation-menu">
+            <ul>
+                <li><a href="#">главная</a></li>
+                <li><a href="#">блюды</a></li>
+                <li><a href="#">меню</a></li>
+                <li><a href="#">контакты</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <a href="#">
+        <div class="order-block-text">
+            мои заказы
+        </div>
+    </a>
+</div>
+<header>
+    <div class="carcass">
+        <div class="logo"></div>
+        <div class="header-center-wrap">
+            <div class="child">
+                <div class="delivery-text">
+                    Доставка по бишкеку <span>0 777 56 32 12</span>
+                </div>
+                <div class="navigation-menu">
+                    <ul>
+                        <li><a href="#">главная</a></li>
+                        <li><a href="#">блюды</a></li>
+                        <li><a href="#">меню</a></li>
+                        <li><a href="#">контакты</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-
         <a href="#">
-            <div class="order-block-text">
-                мои заказы
+            <div class="order-block">
+                <div class="order-block-icon">
+                    <img src="{% static 'images/orders-icon.svg' %}"/>
+                </div>
+                <div class="order-block-text">
+                    мои заказы
+                </div>
             </div>
         </a>
     </div>
-    <header>
-        <div class="carcass">
-            <div class="logo"></div>
-            <div class="header-center-wrap">
-                <div class="child">
-                    <div class="delivery-text">
-                        Доставка по бишкеку <span>0 777 56 32 12</span>
+</header>
+<div class="header-image"></div>
+<div class="main-products">
+    <div class="carcass">
+        <div class="main-products-carcass" id="main-menu-products">
+            {% for chicken in chickens %}
+                <div class="product">
+                    <div class="product-image-preview">
+                        <img src="{{ chicken.preview.url }}"/>
                     </div>
-                    <div class="navigation-menu">
-                        <ul>
-                            <li><a href="#">главная</a></li>
-                            <li><a href="#">блюды</a></li>
-                            <li><a href="#">меню</a></li>
-                            <li><a href="#">контакты</a></li>
-                        </ul>
+                    <div class="product-info" id="chicken_{{ chicken.id }}">
+                        <div class="title">{{ chicken.title }}</div>
+                        <div class="description">{{ chicken.description }}</div>
+                        <div class="price">
+                            {% with chicken.sizes.all as sizes %}
+                                <ul>
+                                    {% for size in sizes %}
+                                        <li
+                                            class="price-switch {% if size == sizes|first %}active{% endif %}"
+                                            data-price="{{ size.price }}" data-size="{{ size.title }}">{{ size.title }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% if sizes|length > 0 %}
+                                    <div class="price-value">{{ sizes.0.price }} сом</div>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                        <div class="card">
+                            <button type="button" class="add-to-card" data-target="1">добавить в заказы</button>
+                            <div class="pre-order-settings hidden">
+                                <div class="text">Количество</div>
+                                <div class="count">
+                                    <div class="count-value">1</div>
+                                    <div class="settings-buttons">
+                                        <img src="{% static "images/icons/plus.png" %}" class="plus-trigger"/>
+                                        <img src="{% static "images/icons/minus.png" %}" class="minus-trigger"/>
+                                    </div>
+                                </div>
+                                <div class="done">
+                                    <img src="{% static "images/icons/done.png" %}" class="done-trigger"
+                                                 data-id="{{ chicken.id }}" data-type="chicken"/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <a href="#">
-                <div class="order-block">
-                    <div class="order-block-icon">
-                        <img src="{% static 'images/orders-icon.svg' %}" />
-                    </div>
-                    <div class="order-block-text">
-                        мои заказы
-                    </div>
-                </div>
-            </a>
+            {% endfor %}
         </div>
-    </header>
-    <div class="header-image"></div>
-    <div class="main-products">
-        <div class="carcass">
-            <div class="main-products-carcass" id="main-menu-products">
-                <div class="product">
-                    <div class="product-image-preview">
-                        <img src="{% static 'images/products/chicken1.png' %}" />
-                    </div>
-                    <div class="product-info">
-                        <div class="title">Голень (соус кляр)</div>
-                        <div class="description">Состав: помидоры, свежие огурцы, сладкий лук, перец, маслины, фета</div>
-                        <div class="price">
-                            <ul>
-                                <li class="active">250г</li>
-                                <li>500г</li>
-                            </ul>
-                            <div class="price-value">70 сом</div>
-                        </div>
-                        <div class="card">
-                            <button type="button" class="add-to-card" data-target="1">добавить в заказы</button>
-                            <!--<div class="pre-order-settings">-->
-                                <!--<div class="text">Количество</div>-->
-                                <!--<div class="count">-->
-                                    <!--<div class="count-value">1</div>-->
-                                    <!--<div class="settings-buttons">-->
-                                        <!--<img src="public/images/icons/plus.png" class="plus-trigger" />-->
-                                        <!--<img src="public/images/icons/minus.png" class="minus-trigger" />-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="done">-->
-                                    <!--<img src="public/images/icons/done.png" class="done-trigger" />-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        </div>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="product-image-preview">
-                        <img src="{% static 'images/products/chicken1.png' %}" />
-                    </div>
-                    <div class="product-info">
-                        <div class="title">Голень (соус кляр)</div>
-                        <div class="description">Состав: помидоры, свежие огурцы, сладкий лук, перец, маслины, фета</div>
-                        <div class="price">
-                            <ul>
-                                <li class="active">250г</li>
-                                <li>500г</li>
-                            </ul>
-                            <div class="price-value">70 сом</div>
-                        </div>
-                        <div class="card">
-                            <button type="button" class="add-to-card" data-target="1">добавить в заказы</button>
-                            <!--<div class="pre-order-settings">-->
-                                <!--<div class="text">Количество</div>-->
-                                <!--<div class="count">-->
-                                    <!--<div class="count-value">1</div>-->
-                                    <!--<div class="settings-buttons">-->
-                                        <!--<img src="public/images/icons/plus.png" class="plus-trigger" />-->
-                                        <!--<img src="public/images/icons/minus.png" class="minus-trigger" />-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="done">-->
-                                    <!--<img src="public/images/icons/done.png" class="done-trigger" />-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        </div>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="product-image-preview">
-                        <img src="{% static 'images/products/chicken1.png' %}" />
-                    </div>
-                    <div class="product-info">
-                        <div class="title">Голень (соус кляр)</div>
-                        <div class="description">Состав: помидоры, свежие огурцы, сладкий лук, перец, маслины, фета</div>
-                        <div class="price">
-                            <ul>
-                                <li class="active">250г</li>
-                                <li>500г</li>
-                            </ul>
-                            <div class="price-value">70 сом</div>
-                        </div>
-                        <div class="card">
-                            <button type="button" class="add-to-card" data-target="1">добавить в заказы</button>
-                            <!--<div class="pre-order-settings">-->
-                                <!--<div class="text">Количество</div>-->
-                                <!--<div class="count">-->
-                                    <!--<div class="count-value">1</div>-->
-                                    <!--<div class="settings-buttons">-->
-                                        <!--<img src="public/images/icons/plus.png" class="plus-trigger" />-->
-                                        <!--<img src="public/images/icons/minus.png" class="minus-trigger" />-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="done">-->
-                                    <!--<img src="public/images/icons/done.png" class="done-trigger" />-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        </div>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="product-image-preview">
-                        <img src="{% static 'images/products/chicken1.png' %}" />
-                    </div>
-                    <div class="product-info">
-                        <div class="title">Голень (соус кляр)</div>
-                        <div class="description">Состав: помидоры, свежие огурцы, сладкий лук, перец, маслины, фета</div>
-                        <div class="price">
-                            <ul>
-                                <li class="active">250г</li>
-                                <li>500г</li>
-                            </ul>
-                            <div class="price-value">70 сом</div>
-                        </div>
-                        <div class="card">
-                            <button type="button" class="add-to-card" data-target="1">добавить в заказы</button>
-                            <!--<div class="pre-order-settings">-->
-                                <!--<div class="text">Количество</div>-->
-                                <!--<div class="count">-->
-                                    <!--<div class="count-value">1</div>-->
-                                    <!--<div class="settings-buttons">-->
-                                        <!--<img src="public/images/icons/plus.png" class="plus-trigger" />-->
-                                        <!--<img src="public/images/icons/minus.png" class="minus-trigger" />-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="done">-->
-                                    <!--<img src="public/images/icons/done.png" class="done-trigger" />-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        </div>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="product-image-preview">
-                        <img src="{% static 'images/products/chicken1.png' %}" />
-                    </div>
-                    <div class="product-info">
-                        <div class="title">Голень (соус кляр)</div>
-                        <div class="description">Состав: помидоры, свежие огурцы, сладкий лук, перец, маслины, фета</div>
-                        <div class="price">
-                            <ul>
-                                <li class="active">250г</li>
-                                <li>500г</li>
-                            </ul>
-                            <div class="price-value">70 сом</div>
-                        </div>
-                        <div class="card">
-                            <button type="button" class="add-to-card" data-target="1">добавить в заказы</button>
-                            <!--<div class="pre-order-settings">-->
-                                <!--<div class="text">Количество</div>-->
-                                <!--<div class="count">-->
-                                    <!--<div class="count-value">1</div>-->
-                                    <!--<div class="settings-buttons">-->
-                                        <!--<img src="public/images/icons/plus.png" class="plus-trigger" />-->
-                                        <!--<img src="public/images/icons/minus.png" class="minus-trigger" />-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="done">-->
-                                    <!--<img src="public/images/icons/done.png" class="done-trigger" />-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        </div>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="product-image-preview">
-                        <img src="{% static 'images/products/chicken1.png' %}" />
-                    </div>
-                    <div class="product-info">
-                        <div class="title">Голень (соус кляр)</div>
-                        <div class="description">Состав: помидоры, свежие огурцы, сладкий лук, перец, маслины, фета</div>
-                        <div class="price">
-                            <ul>
-                                <li class="active">250г</li>
-                                <li>500г</li>
-                            </ul>
-                            <div class="price-value">70 сом</div>
-                        </div>
-                        <div class="card">
-                            <button type="button" class="add-to-card" data-target="1">добавить в заказы</button>
-                            <!--<div class="pre-order-settings">-->
-                                <!--<div class="text">Количество</div>-->
-                                <!--<div class="count">-->
-                                    <!--<div class="count-value">1</div>-->
-                                    <!--<div class="settings-buttons">-->
-                                        <!--<img src="public/images/icons/plus.png" class="plus-trigger" />-->
-                                        <!--<img src="public/images/icons/minus.png" class="minus-trigger" />-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="done">-->
-                                    <!--<img src="public/images/icons/done.png" class="done-trigger" />-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="load-more-button">
-                <button type="button">Больше блюд</button>
-            </div>
+        <div class="load-more-button">
+            <button type="button">Больше блюд</button>
         </div>
     </div>
-    <div class="special-menu">
-        <div class="carcass">
-            <div class="block-title">Специальное меню</div>
+</div>
+<div class="special-menu">
+    <div class="carcass">
+        <div class="block-title">Специальное меню</div>
+        <div class="delimiter"></div>
+        <div class="block-description">Lorem ipsum dolor it amet dolor</div>
+        <div class="main-products-carcass">
+            {% for salade in salades %}
+                <div class="product">
+                    <div class="product-image-preview">
+                        <img src="{{ salade.preview.url }}"/>
+                    </div>
+                    <div class="product-info" id="salade_{{ salade.id }}">
+                        <div class="title">{{ salade.title }}</div>
+                        <div class="description">{{ salade.description }}</div>
+                        <div class="price-special">
+                            <div class="price-value">{{ salade.price }} сом</div>
+                        </div>
+                        <div class="card">
+                            <button type="button" class="add-to-card">добавить в заказы</button>
+                            <div class="pre-order-settings hidden">
+                                <div class="text">Количество</div>
+                                <div class="count">
+                                    <div class="count-value">1</div>
+                                    <div class="settings-buttons">
+                                        <img src="{% static "images/icons/plus.png" %}" class="plus-trigger"/>
+                                        <img src="{% static "images/icons/minus.png" %}" class="minus-trigger"/>
+                                    </div>
+                                </div>
+                                <div class="done">
+                                    <img src="{% static "images/icons/done.png" %}" class="done-trigger"
+                                            data-id="{{ salade.id }}" data-type="salade"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="free-space"></div>
+    </div>
+</div>
+<div class="special-menu">
+    <div class="carcass">
+        <div class="block-title">Картофель</div>
+        <div class="delimiter"></div>
+        <div class="block-description">Lorem ipsum dolor it amet dolor</div>
+        <div class="main-products-carcass">
+            {% for potato in potatoes %}
+                <div class="product" >
+                    <div class="product-image-preview">
+                        <img src="{{ potato.preview.url }}"/>
+                    </div>
+                    <div class="product-info" id="potato_{{ potato.id }}">
+                        <div class="title">{{ potato.title }}</div>
+                        <div class="description">{{ potato.description }}</div>
+                        <div class="price">
+                            {% with potato.sizes.all as sizes %}
+                                <ul>
+                                    {% for size in sizes %}
+                                        <li data-id="{{ potato.id }}"
+                                            class="price-switch {% if size == sizes|first %}active{% endif %}"
+                                            data-price="{{ size.price }}" data-size="{{ size.title }}">{{ size.title }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% if sizes|length > 0 %}
+                                    <div class="price-value">{{ sizes.0.price }} сом</div>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                        <div class="card">
+                            <button type="button" class="add-to-card" data-target="1">добавить в заказы</button>
+                            <div class="pre-order-settings hidden">
+                                <div class="text">Количество</div>
+                                <div class="count">
+                                    <div class="count-value">1</div>
+                                    <div class="settings-buttons">
+                                        <img src="{% static "images/icons/plus.png" %}" class="plus-trigger"/>
+                                        <img src="{% static "images/icons/minus.png" %}" class="minus-trigger"/>
+                                    </div>
+                                </div>
+                                <div class="done">
+                                    <img src="{% static "images/icons/done.png" %}" class="done-trigger"
+                                            data-id="{{ potato.id }}" data-type="potato"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="free-space"></div>
+    </div>
+</div>
+<div class="drink-menu">
+    <div class="carcass">
+        <div class="block-title">Выбрать напитки</div>
+        <div class="delimiter"></div>
+        <div class="block-description">Горячие и холодные напитки, которые дополнят<br/>
+            изысканный вкус горячей курицы
+        </div>
+
+        <div class="drink-products-carcass">
+            {% for drinking in drinkings %}
+                <div class="drink-product" id="drinking_{{ drinking.id }}">
+                    <div class="drink-preview">
+                        <img src="{{ drinking.preview.url }}"/>
+                    </div>
+                    <div class="drink-title">
+                        {{ drinking.title }}
+                    </div>
+                    <div class="drink-price">
+                        {{ drinking.price }} сом
+                    </div>
+                    <div class="drink-order-button">
+                        <button type="button" class="add-to-card">Добавить в заказы</button>
+                        <div class="pre-order-settings hidden">
+                            <div class="text">Количество</div>
+                            <div class="count">
+                                <div class="count-value">1</div>
+                                <div class="settings-buttons">
+                                    <img src="{% static "images/icons/plus.png" %}" class="plus-trigger"/>
+                                    <img src="{% static "images/icons/minus.png" %}" class="minus-trigger"/>
+                                </div>
+                            </div>
+                            <div class="done">
+                                <img src="{% static "images/icons/done.png" %}" class="done-trigger"
+                                        data-id="{{ drinking.id }}" data-type="drinking"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="free-space"></div>
+        <div class="free-space"></div>
+    </div>
+</div>
+<div class="order">
+    <div class="carcass">
+        <div class="order-dashboard score">
+            <div class="block-title">Мои заказы</div>
             <div class="delimiter"></div>
-            <div class="block-description">Lorem ipsum dolor it amet dolor </div>
-            <div class="main-products-carcass">
-                <div class="product">
-                    <div class="product-image-preview">
-                        <img src="{% static 'images/products/salat1.png' %}" />
+
+            <div class="table">
+                <div class="row">
+                    <div class="order-col-title">Голень<br/>
+                        (европейский соус)
                     </div>
-                    <div class="product-info">
-                        <div class="title">Греческий салат</div>
-                        <div class="description">Состав: помидоры, свежие огурцы, сладкий лук, перец, маслины, фета</div>
-                        <div class="price-special">
-                            <div class="price-value">70 сом</div>
-                        </div>
-                        <div class="card">
-                            <button type="button">добавить в заказы</button>
+                    <div class="order-col-size">500 гр</div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
                         </div>
                     </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
                 </div>
-                <div class="product">
-                    <div class="product-image-preview">
-                        <img src="{% static 'images/products/salat1.png' %}" />
+                <div class="row">
+                    <div class="order-col-title">Голень<br/>
+                        (европейский соус)
                     </div>
-                    <div class="product-info">
-                        <div class="title">Голень (соус кляр)</div>
-                        <div class="description">Состав: помидоры, свежие огурцы, сладкий лук, перец, маслины, фета</div>
-                        <div class="price-special">
-                            <div class="price-value">70 сом</div>
-                        </div>
-                        <div class="card">
-                            <button type="button">добавить в заказы</button>
+                    <div class="order-col-size">500 гр</div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
                         </div>
                     </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
                 </div>
-                <div class="product">
-                    <div class="product-image-preview">
-                        <img src="{% static 'images/products/salat1.png' %}" />
+                <div class="row">
+                    <div class="order-col-title">Голень<br/>
+                        (европейский соус)
                     </div>
-                    <div class="product-info">
-                        <div class="title">Голень (соус кляр)</div>
-                        <div class="description">Состав: помидоры, свежие огурцы, сладкий лук, перец, маслины, фета</div>
-                        <div class="price-special">
-                            <div class="price-value">70 сом</div>
-                        </div>
-                        <div class="card">
-                            <button type="button">добавить в заказы</button>
+                    <div class="order-col-size">500 гр</div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
                         </div>
                     </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
                 </div>
-                <div class="product">
-                    <div class="product-image-preview">
-                        <img src="{% static 'images/products/salat1.png' %}" />
-                    </div>
-                    <div class="product-info">
-                        <div class="title">Голень (соус кляр)</div>
-                        <div class="description">Состав: помидоры, свежие огурцы, сладкий лук, перец, маслины, фета</div>
-                        <div class="price-special">
-                            <div class="price-value">70 сом</div>
+                <div class="row">
+                    <div class="order-col-title">Капучино</div>
+                    <div class="order-col-size"></div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
                         </div>
-                        <div class="card">
-                            <button type="button">добавить в заказы</button>
+                    </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
+                </div>
+                <div class="row">
+                    <div class="order-col-title">Голень<br/>
+                        (европейский соус)
+                    </div>
+                    <div class="order-col-size">500 гр</div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
                         </div>
                     </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
+                </div>
+                <div class="row">
+                    <div class="order-col-title">Голень<br/>
+                        (европейский соус)
+                    </div>
+                    <div class="order-col-size">500 гр</div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
+                </div>
+                <div class="row">
+                    <div class="order-col-title">Голень<br/>
+                        (европейский соус)
+                    </div>
+                    <div class="order-col-size">500 гр</div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
+                </div>
+                <div class="row">
+                    <div class="order-col-title">Голень<br/>
+                        (европейский соус)
+                    </div>
+                    <div class="order-col-size">500 гр</div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
+                </div>
+                <div class="row">
+                    <div class="order-col-title">Голень<br/>
+                        (европейский соус)
+                    </div>
+                    <div class="order-col-size">500 гр</div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
+                </div>
+                <div class="row">
+                    <div class="order-col-title">Голень<br/>
+                        (европейский соус)
+                    </div>
+                    <div class="order-col-size">500 гр</div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
+                </div>
+                <div class="row">
+                    <div class="order-col-title">Голень<br/>
+                        (европейский соус)
+                    </div>
+                    <div class="order-col-size">500 гр</div>
+                    <div class="order-col-count">
+                        <span>Количество</span>
+
+                        <div class="count">
+                            <div class="count-value">1</div>
+                            <div class="settings-buttons">
+                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
+                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-col-price">250 сом</div>
+                    <div class="order-col-delete">X</div>
                 </div>
             </div>
-            <div class="free-space"></div>
-        </div>
-    </div>
-    <div class="drink-menu">
-        <div class="carcass">
-            <div class="block-title">Выбрать напитки</div>
-            <div class="delimiter"></div>
-            <div class="block-description">Горячие и холодные напитки, которые дополнят<br />
-                                            изысканный вкус горячей курицы</div>
 
-            <div class="drink-products-carcass">
-                <div class="drink-product">
-                    <div class="drink-preview">
-                        <img src="{% static 'images/products/coffie1.png' %}" />
-                    </div>
-                    <div class="drink-title">
-                        Американо
-                    </div>
-                    <div class="drink-price">
-                        70 сом
-                    </div>
-                    <div class="drink-order-button">
-                        <button type="button">Добавить в заказы</button>
-                    </div>
-                </div>
-                <div class="drink-product">
-                    <div class="drink-preview">
-                        <img src="{% static 'images/products/coffie1.png' %}" />
-                    </div>
-                    <div class="drink-title">
-                        Американо
-                    </div>
-                    <div class="drink-price">
-                        70 сом
-                    </div>
-                    <div class="drink-order-button">
-                        <button type="button">Добавить в заказы</button>
-                    </div>
-                </div>
-                <div class="drink-product">
-                    <div class="drink-preview">
-                        <img src="{% static 'images/products/coffie1.png' %}" />
-                    </div>
-                    <div class="drink-title">
-                        Американо
-                    </div>
-                    <div class="drink-price">
-                        70 сом
-                    </div>
-                    <div class="drink-order-button">
-                        <button type="button">Добавить в заказы</button>
-                    </div>
-                </div>
-                <div class="drink-product">
-                    <div class="drink-preview">
-                        <img src="{% static 'images/products/coffie1.png' %}" />
-                    </div>
-                    <div class="drink-title">
-                        Американо
-                    </div>
-                    <div class="drink-price">
-                        70 сом
-                    </div>
-                    <div class="drink-order-button">
-                        <button type="button">Добавить в заказы</button>
-                    </div>
+            <div class="score">
+                <div class="score-detail">
+                    <table>
+                        <tr>
+                            <td class="left-side">Доставка:</td>
+                            <td class="right-side">бесплатно</td>
+                        </tr>
+                        <tr>
+                            <td class="left-side">Итого:</td>
+                            <td class="right-side">1000 сом</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
-            <div class="free-space"></div>
-            <div class="free-space"></div>
-        </div>
-    </div>
-    <div class="order">
-        <div class="carcass">
-            <div class="order-dashboard score">
-                <div class="block-title">Мои заказы</div>
-                <div class="delimiter"></div>
 
-                <div class="table">
-                    <div class="row">
-                        <div class="order-col-title">Голень<br />
-                            (европейский соус)</div>
-                        <div class="order-col-size">500 гр</div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                    <div class="row">
-                        <div class="order-col-title">Голень<br />
-                            (европейский соус)</div>
-                        <div class="order-col-size">500 гр</div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                    <div class="row">
-                        <div class="order-col-title">Голень<br />
-                            (европейский соус)</div>
-                        <div class="order-col-size">500 гр</div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                    <div class="row">
-                        <div class="order-col-title">Капучино</div>
-                        <div class="order-col-size"></div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                    <div class="row">
-                        <div class="order-col-title">Голень<br />
-                            (европейский соус)</div>
-                        <div class="order-col-size">500 гр</div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                    <div class="row">
-                        <div class="order-col-title">Голень<br />
-                            (европейский соус)</div>
-                        <div class="order-col-size">500 гр</div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                    <div class="row">
-                        <div class="order-col-title">Голень<br />
-                            (европейский соус)</div>
-                        <div class="order-col-size">500 гр</div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                    <div class="row">
-                        <div class="order-col-title">Голень<br />
-                            (европейский соус)</div>
-                        <div class="order-col-size">500 гр</div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                    <div class="row">
-                        <div class="order-col-title">Голень<br />
-                            (европейский соус)</div>
-                        <div class="order-col-size">500 гр</div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                    <div class="row">
-                        <div class="order-col-title">Голень<br />
-                            (европейский соус)</div>
-                        <div class="order-col-size">500 гр</div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                    <div class="row">
-                        <div class="order-col-title">Голень<br />
-                            (европейский соус)</div>
-                        <div class="order-col-size">500 гр</div>
-                        <div class="order-col-count">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">1</div>
-                                <div class="settings-buttons">
-                                    <img src="public/images/icons/plus.png" class="plus-trigger" />
-                                    <img src="public/images/icons/minus.png" class="minus-trigger" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">250 сом</div>
-                        <div class="order-col-delete">X</div>
-                    </div>
-                </div>
-
-                <div class="score">
-                    <div class="score-detail">
-                        <table>
-                            <tr>
-                                <td class="left-side">Доставка:</td>
-                                <td class="right-side">бесплатно</td>
-                            </tr>
-                            <tr>
-                                <td class="left-side">Итого:</td>
-                                <td class="right-side">1000 сом</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="order-button">
-                    <button type="button">Оформить доставку</button>
-                </div>
+            <div class="order-button">
+                <button type="button">Оформить доставку</button>
             </div>
         </div>
     </div>
+</div>
 
 <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
-<script>
-    // =========== Settings =======================================================
-    var plus_icon = '{% static 'images/icons/plus.png' %}';
-    var minus_icon = '{% static 'images/icons/minus.png' %}';
-    var done_icon = '{% static 'images/icons/done.png' %}';
-</script>
-<script src="{% static 'js/core.js' %}"></script>
 <script>
     $(document).ready(function () {
         $(window).on('scroll', function () {
@@ -649,6 +511,11 @@
             }
         });
     });
+
+    var add_to_cart_url = '{% url "add_to_cart" %}';
+    var remove_from_cart_url = '{% url "remove_from_cart" %}';
+    var csrf = '{{ csrf_token }}';
 </script>
+<script src="{% static 'js/core.js' %}"></script>
 </body>
 </html>

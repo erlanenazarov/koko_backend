@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
-    'koko_models'
+    'koko_models',
+    'akoikelov.djazz'
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,6 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 JET_SIDE_MENU_COMPACT = True
 JET_INDEX_DASHBOARD = 'jet.dashboard.dashboard.DefaultIndexDashboard'
 JET_APP_INDEX_DASHBOARD = 'jet.dashboard.dashboard.DefaultAppIndexDashboard'
+
+SESSION_COOKIE_DOMAIN = None
+SESSION_COOKIE_SECURE = False

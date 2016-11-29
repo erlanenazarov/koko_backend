@@ -354,7 +354,7 @@ a .order-block:hover > .order-block-icon > img {
 }
 
 .product-info > .price {
-    width: 154px;
+    width: 170px;
     height: 42px;
     margin: 20px auto;
     position: relative;
@@ -964,4 +964,8 @@ a .order-block:hover > .order-block-icon > img {
         width: 190px;
         height: 230px;
     }
+}
+
+.hidden {
+    display: none;
 }
