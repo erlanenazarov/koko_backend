@@ -22,9 +22,31 @@
     <meta name="msapplication-TileColor" content="rgba(0,0,0,0)">
     <meta name="msapplication-TileImage" content="{% static 'favicon/ms-icon-144x144.png' %}">
     <meta name="theme-color" content="rgba(0,0,0,0)">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 <body>
+<div class="md-overlay" id="order-modal">
+    <div class="md-window">
+        <div class="child">
+            <div class="md-close"><img src="public/images/icons/close.png"/></div>
+            <div class="block-title">Форма доставки</div>
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <input type="text" name="nickname" placeholder="Имя"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="nickname" placeholder="Адрес"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="nickname" placeholder="Телефон"/>
+                </div>
+                <div class="order-button">
+                    <button type="submit">Отправить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="pre-header" id="fixed-header">
     <div class="pre-header-center">
         <div class="navigation-menu">
@@ -121,11 +143,11 @@
             {% endfor %}
         </div>
         <div class="load-more-button">
-            <button type="button">Больше блюд</button>
+            <button type="button" class="more_food" data-type="chicken" data-page="1">Больше блюд</button>
         </div>
     </div>
 </div>
-<div class="special-menu">
+<div class="special-menu score">
     <div class="carcass">
         <div class="block-title">Специальное меню</div>
         <div class="delimiter"></div>
@@ -163,10 +185,12 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="free-space"></div>
+        <div class="load-more-button">
+            <button type="button" class="more_food" data-type="salade" data-page="1">Больше блюд</button>
+        </div>
     </div>
 </div>
-<div class="special-menu">
+<div class="special-menu score">
     <div class="carcass">
         <div class="block-title">Картофель</div>
         <div class="delimiter"></div>
@@ -215,7 +239,9 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="free-space"></div>
+        <div class="load-more-button">
+            <button type="button" class="more_food" data-type="potato" data-page="1">Больше блюд</button>
+        </div>
     </div>
 </div>
 <div class="drink-menu">
@@ -268,14 +294,15 @@
             <div class="block-title">Мои заказы</div>
             <div class="delimiter"></div>
 
-            <div class="table">
+            <div class="cart_list">
+                <div class="table">
                 {% for cart_item in cart_items %}
-                    <div class="row">
+                    <div class="row" id="cart_item_{{ cart_item.id }}_{{ cart_item.type }}{% if cart_item.size %}_{{ cart_item.size }}{% endif %}">
                         <div class="order-col-title">{{ cart_item.title }}<br/>
 
                         </div>
                         <div class="order-col-size">{% if cart_item.size %} {{ cart_item.size }} {% endif %}</div>
-                        <div class="order-col-count">
+                        <div class="order-col-count score">
                             <span>Количество</span>
                             <div class="count">
                                 <div class="count-value">{{ cart_item.quantity }}</div>
@@ -286,7 +313,9 @@
                             </div>
                         </div>
                         <div class="order-col-price">{{ cart_item.price }} сом</div>
-                        <div class="order-col-delete">X</div>
+                        <div class="order-col-delete" data-id="{{ cart_item.id }}" data-type="{{ cart_item.type}}"
+                                   data-price="{{ cart_item.price }}" data-quantity="{{ cart_item.quantity }}"
+                                {% if cart_item.size %} data-size="{{ cart_item.size }}"{% endif %}>X</div>
                     </div>
                 {% endfor %}
             </div>
@@ -300,14 +329,15 @@
                         </tr>
                         <tr>
                             <td class="left-side">Итого:</td>
-                            <td class="right-side">{{ cart_sum }} сом</td>
+                            <td class="right-side sum">{{ cart_sum }} сом</td>
                         </tr>
                     </table>
                 </div>
             </div>
+            </div>
 
             <div class="order-button">
-                <button type="button">Оформить доставку</button>
+                <button type="button" id="order-button">Оформить доставку</button>
             </div>
         </div>
     </div>
@@ -315,19 +345,16 @@
 
 <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 <script>
-    $(document).ready(function () {
-        $(window).on('scroll', function () {
-            if ($(window).scrollTop() >= 100) {
-                $('#fixed-header').fadeIn('fast');
-            } else {
-                $('#fixed-header').fadeOut('fast');
-            }
-        });
-    });
+
 
     var add_to_cart_url = '{% url "add_to_cart" %}';
     var remove_from_cart_url = '{% url "remove_from_cart" %}';
+    var load_more_url = '{% url "paginate_products" %}';
+    var cart_list_url = '{% url "cart_list" %}';
     var csrf = '{{ csrf_token }}';
+    var closeButton = $('.md-close');
+    var openButton = $('#order-button');
+
 </script>
 <script src="{% static 'js/core.js' %}"></script>
 </body>

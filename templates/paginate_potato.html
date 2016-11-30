@@ -1,0 +1,46 @@
+{% load staticfiles %}
+
+{% for potato in products %}
+    <div class="product">
+        <div class="product-image-preview">
+            <img src="{{ potato.preview.url }}"/>
+        </div>
+        <div class="product-info" id="potato_{{ potato.id }}">
+            <div class="title">{{ potato.title }}</div>
+            <div class="description">{{ potato.description }}</div>
+            <div class="price">
+                {% with potato.sizes.all as sizes %}
+                    <ul>
+                        {% for size in sizes %}
+                            <li data-id="{{ potato.id }}"
+                                class="price-switch {% if size == sizes|first %}active{% endif %}"
+                                data-price="{{ size.price }}" data-size="{{ size.title }}">{{ size.title }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% if sizes|length > 0 %}
+                        <div class="price-value">{{ sizes.0.price }} сом</div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class="card">
+                <button type="button" class="add-to-card {% if potato in potatoes_favs %} hidden {% endif %}"
+                        data-target="1">добавить в заказы
+                </button>
+                <div class="pre-order-settings {% if potato not in potatoes_favs %}hidden{% endif %}">
+                    <div class="text">Количество</div>
+                    <div class="count">
+                        <div class="count-value">1</div>
+                        <div class="settings-buttons">
+                            <img src="{% static "images/icons/plus.png" %}" class="plus-trigger"/>
+                            <img src="{% static "images/icons/minus.png" %}" class="minus-trigger"/>
+                        </div>
+                    </div>
+                    <div class="done">
+                        <img src="{% static "images/icons/done.png" %}" class="done-trigger"
+                             data-id="{{ potato.id }}" data-type="potato"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

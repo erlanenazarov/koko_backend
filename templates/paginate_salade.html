@@ -1,0 +1,34 @@
+{% load staticfiles %}
+{% for salade in products %}
+    <div class="product">
+        <div class="product-image-preview">
+            <img src="{{ salade.preview.url }}"/>
+        </div>
+        <div class="product-info" id="salade_{{ salade.id }}">
+            <div class="title">{{ salade.title }}</div>
+            <div class="description">{{ salade.description }}</div>
+            <div class="price-special">
+                <div class="price-value">{{ salade.price }} сом</div>
+            </div>
+            <div class="card">
+                <button type="button" class="add-to-card {% if salade in salades_favs %} hidden {% endif %}">добавить в
+                    заказы
+                </button>
+                <div class="pre-order-settings {% if salade not in salades_favs %}hidden {% endif %}">
+                    <div class="text">Количество</div>
+                    <div class="count">
+                        <div class="count-value">1</div>
+                        <div class="settings-buttons">
+                            <img src="{% static "images/icons/plus.png" %}" class="plus-trigger"/>
+                            <img src="{% static "images/icons/minus.png" %}" class="minus-trigger"/>
+                        </div>
+                    </div>
+                    <div class="done">
+                        <img src="{% static "images/icons/done.png" %}" class="done-trigger"
+                             data-id="{{ salade.id }}" data-type="salade" data-price="{{ salade.price }}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
