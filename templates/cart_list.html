@@ -12,15 +12,17 @@
 
                 <div class="count">
                     <div class="count-value">{{ cart_item.quantity }}</div>
-                    <div class="settings-buttons">
-                        <img src="{% static "images/icons/plus.png" %}" class="plus-trigger"/>
-                        <img src="{% static "images/icons/minus.png" %}" class="minus-trigger"/>
+                    <div class="settings-buttons" data-id="{{ cart_item.id }}" data-type="{{ cart_item.type }}"
+                         data-price="{{ cart_item.price }}"
+                            {% if cart_item.size %} data-size="{{ cart_item.size }}"{% endif %}>
+                        <img src="{% static "images/icons/plus.png" %}" class="plus-trigger cart_item_plus"/>
+                        <img src="{% static "images/icons/minus.png" %}" class="minus-trigge cart_item_minus"/>
                     </div>
                 </div>
             </div>
             <div class="order-col-price">{{ cart_item.price }} сом</div>
             <div class="order-col-delete" data-id="{{ cart_item.id }}" data-type="{{ cart_item.type }}"
-                    data-price="{{ cart_item.price }}" data-quantity="{{ cart_item.quantity }}"
+                 data-price="{{ cart_item.price }}" data-quantity="{{ cart_item.quantity }}"
                     {% if cart_item.size %} data-size="{{ cart_item.size }}"{% endif %}>X
             </div>
         </div>

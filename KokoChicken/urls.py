@@ -26,7 +26,8 @@ urlpatterns = [
     url(r'^cart/add$', add_to_cart, name='add_to_cart'),
     url(r'^cart/remove$', remove_from_cart, name='remove_from_cart'),
     url(r'^cart/list$', cart_list, name='cart_list'),
-    url(r'^paginate', paginate_products, name='paginate_products'),
+    url(r'^paginate$', paginate_products, name='paginate_products'),
+    url(r'^cart/item/quantity', set_cart_item_quantity, name='cart_item_quantity'),
 ]
 
 if settings.DEBUG:

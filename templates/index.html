@@ -295,45 +295,7 @@
             <div class="delimiter"></div>
 
             <div class="cart_list">
-                <div class="table">
-                {% for cart_item in cart_items %}
-                    <div class="row" id="cart_item_{{ cart_item.id }}_{{ cart_item.type }}{% if cart_item.size %}_{{ cart_item.size }}{% endif %}">
-                        <div class="order-col-title">{{ cart_item.title }}<br/>
-
-                        </div>
-                        <div class="order-col-size">{% if cart_item.size %} {{ cart_item.size }} {% endif %}</div>
-                        <div class="order-col-count score">
-                            <span>Количество</span>
-                            <div class="count">
-                                <div class="count-value">{{ cart_item.quantity }}</div>
-                                <div class="settings-buttons">
-                                    <img src="{% static "images/icons/plus.png" %}" class="plus-trigger"/>
-                                    <img src="{% static "images/icons/minus.png" %}" class="minus-trigger"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="order-col-price">{{ cart_item.price }} сом</div>
-                        <div class="order-col-delete" data-id="{{ cart_item.id }}" data-type="{{ cart_item.type}}"
-                                   data-price="{{ cart_item.price }}" data-quantity="{{ cart_item.quantity }}"
-                                {% if cart_item.size %} data-size="{{ cart_item.size }}"{% endif %}>X</div>
-                    </div>
-                {% endfor %}
-            </div>
-
-            <div class="score">
-                <div class="score-detail">
-                    <table>
-                        <tr>
-                            <td class="left-side">Доставка:</td>
-                            <td class="right-side">бесплатно</td>
-                        </tr>
-                        <tr>
-                            <td class="left-side">Итого:</td>
-                            <td class="right-side sum">{{ cart_sum }} сом</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+                {% include "cart_list.html" with cart_items=cart_items %}
             </div>
 
             <div class="order-button">
@@ -346,11 +308,11 @@
 <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 <script>
 
-
     var add_to_cart_url = '{% url "add_to_cart" %}';
     var remove_from_cart_url = '{% url "remove_from_cart" %}';
     var load_more_url = '{% url "paginate_products" %}';
     var cart_list_url = '{% url "cart_list" %}';
+    var cart_item_quantity_url = '{% url "cart_item_quantity" %}';
     var csrf = '{{ csrf_token }}';
     var closeButton = $('.md-close');
     var openButton = $('#order-button');

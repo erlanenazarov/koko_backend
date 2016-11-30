@@ -201,6 +201,49 @@ def paginate_products(request):
         return render(request, 'paginate_salade.html', dict(products=products, salades_favs=salades_favs))
 
 
+@csrf_exempt
+def set_cart_item_quantity(request):
+    if request.is_ajax():
+        item = request.POST.get('item')
+        if 'cart_items' in request.COOKIES:
+            cart_items = json.loads(request.COOKIES['cart_items'])
+        else:
+            cart_items = []
+
+        if item:
+            item = json.loads(item)
+            print(item);
+            if hasattr(item, 'size'):
+                for cart_item in cart_items:
+                    if cart_item['id'] == item['id'] and cart_item['type'] == item['type'] and cart_item['size'] == item['size']:
+                        updated_item = item
+                        updated_item['price'] = cart_item['price']
+                        updated_item['title'] = cart_item['title']
+                        cart_items.remove(cart_item)
+                        cart_items.append(updated_item)
+            else:
+                for cart_item in cart_items:
+                    if cart_item['id'] == item['id'] and cart_item['type'] == item['type']:
+                        updated_item = item
+                        updated_item['price'] = cart_item['price']
+                        updated_item['title'] = cart_item['title']
+                        cart_items.remove(cart_item)
+                        cart_items.append(updated_item)
+
+            result_response = JsonResponse(dict(success=True))
+            result_response = set_cookie(result_response, 'cart_items', json.dumps(cart_items))
+
+            return result_response
+        else:
+            result_response = JsonResponse(dict(success=False))
+            result_response = set_cookie(result_response, 'cart_items', json.dumps(cart_items))
+
+            return result_response
+
+    else:
+        return HttpResponseRedirect(reverse('index'))
+
+
 def set_cookie(response, key, value, days_expire=7):
     if days_expire is None:
         max_age = 365 * 24 * 60 * 60  # one year

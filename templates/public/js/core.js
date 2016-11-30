@@ -169,4 +169,46 @@ $(document).ready(function () {
             }
         });
     })
+
+    // increase/decrease product quantity
+    $('.cart_item_plus').on('click', function () {
+        var parent = $(this).parent();
+        var id = $(parent).attr('data-id');
+        var type = $(parent).attr('data-type');
+        var size = $(parent).attr('data-size');
+        var quantity = $('div.count-value', $(parent).parent()).html();
+
+        var data = null;
+        if (type == 'potato' || type == 'chicken') {
+            data = {
+                id: id, type: type, size: size, quantity: ++quantity
+            };
+        } else {
+            data = {
+                id: id, type: type, quantity: ++quantity
+            };
+        }
+
+        console.log(data);
+
+        $.ajax({
+            method: 'POST',
+            url: cart_item_quantity_url,
+            data: {item: JSON.stringify(data), csrfmiddlewaretoken: csrf},
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    var sum = 0;
+                    $('div.order-col-delete').each(function (index, obj) {
+                        sum += parseInt($(obj).attr('data-price')) * parseInt($(obj).attr('data-quantity'))
+                    }).promise().done(function () {
+                        $('td.sum').html(sum + ' сом');
+                    });
+                }
+            },
+            error: function (e) {
+
+            }
+        });
+    })
 });
