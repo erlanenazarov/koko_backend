@@ -17,10 +17,41 @@ def generate_view_params():
 def index_page(request):
     params = {}
 
+    if 'cart_items' in request.COOKIES:
+        cart_items = json.loads(request.COOKIES['cart_items'])
+    else:
+        cart_items = []
+
+    chicken_favs = []
+    potatoes_favs = []
+    salades_favs = []
+    drinkings_favs = []
+
+    cart_sum = 0
+
+    if cart_items.__len__() > 0:
+        for cart_item in cart_items:
+           cart_sum += int(cart_item['quantity']) * int(cart_item['price'])
+
+           if cart_item['type'] == 'chicken':
+               chicken_favs.append(MainProduct.objects.filter(id=cart_item['id']).first())
+           elif cart_item['type'] == 'potato':
+               potatoes_favs.append(PotatoProduct.objects.filter(id=cart_item['id']).first())
+           elif cart_item['type'] == 'salade':
+               salades_favs.append(SaladeProduct.objects.filter(id=cart_item['id']).first())
+           elif cart_item['type'] == 'drinking':
+               drinkings_favs.append(DrinkingProduct.objects.filter(id=cart_item['id']).first())
+
     params['chickens'] = MainProduct.objects.all()
     params['potatoes'] = PotatoProduct.objects.all()
     params['salades'] = SaladeProduct.objects.all()
     params['drinkings'] = DrinkingProduct.objects.all()
+    params['chicken_favs'] = chicken_favs
+    params['potatoes_favs'] = potatoes_favs
+    params['salades_favs'] = salades_favs
+    params['drinkings_favs'] = drinkings_favs
+    params['cart_items'] = cart_items
+    params['cart_sum'] = cart_sum
 
     return render(request, 'index.html', params)
 
@@ -37,21 +68,25 @@ def add_to_cart(request):
             item = json.loads(item)
             is_new = True
             for cart_item in cart_items:
-                if cart_item['type'] == 'chicken' or cart_item['type'] == 'potato':
-                    if hasattr(item, 'size') and hasattr(cart_item, 'size'):
-                        check_size = item['size'] == cart_item['size']
-                    else:
-                        check_size = True
-                else:
-                    check_size = True
+                if cart_item['type'] != item['type']:
+                    continue
 
-                if cart_item['id'] == item['id'] and cart_item['type'] == item['type'] and check_size:
-                    cart_item['quantity'] = str(int(cart_item['quantity']) +  int(item['quantity']))
-                    updated_item = cart_item
-                    cart_items.remove(cart_item)
-                    cart_items.append(updated_item)
-                    is_new = False
-                    break
+                if item['type'] == 'chicken' or item['type'] == 'potato':
+                    if cart_item['id'] == item['id'] and cart_item['size'] == item['size']:
+                        cart_item['quantity'] = str(int(cart_item['quantity']) + int(item['quantity']))
+                        updated_item = cart_item
+                        cart_items.remove(cart_item)
+                        cart_items.append(updated_item)
+                        is_new = False
+                        break
+                else:
+                    if cart_item['id'] == item['id']:
+                        cart_item['quantity'] = str(int(cart_item['quantity']) + int(item['quantity']))
+                        updated_item = cart_item
+                        cart_items.remove(cart_item)
+                        cart_items.append(updated_item)
+                        is_new = False
+                        break
 
             if is_new:
                 cart_items.append(item)

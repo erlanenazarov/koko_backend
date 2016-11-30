@@ -100,8 +100,8 @@
                             {% endwith %}
                         </div>
                         <div class="card">
-                            <button type="button" class="add-to-card" data-target="1">добавить в заказы</button>
-                            <div class="pre-order-settings hidden">
+                            <button type="button" class="add-to-card" data-target="1" {% if chicken in chicken_favs %} hidden {% endif %}>добавить в заказы</button>
+                            <div class="pre-order-settings {% if chicken not in chicken_favs %}hidden{% endif %}">
                                 <div class="text">Количество</div>
                                 <div class="count">
                                     <div class="count-value">1</div>
@@ -143,8 +143,8 @@
                             <div class="price-value">{{ salade.price }} сом</div>
                         </div>
                         <div class="card">
-                            <button type="button" class="add-to-card">добавить в заказы</button>
-                            <div class="pre-order-settings hidden">
+                            <button type="button" class="add-to-card {% if salade in salades_favs %} hidden {% endif %}">добавить в заказы</button>
+                            <div class="pre-order-settings {% if salade not in salades_favs %}hidden {% endif %}">
                                 <div class="text">Количество</div>
                                 <div class="count">
                                     <div class="count-value">1</div>
@@ -155,7 +155,7 @@
                                 </div>
                                 <div class="done">
                                     <img src="{% static "images/icons/done.png" %}" class="done-trigger"
-                                            data-id="{{ salade.id }}" data-type="salade"/>
+                                            data-id="{{ salade.id }}" data-type="salade" data-price="{{ salade.price }}"/>
                                 </div>
                             </div>
                         </div>
@@ -195,8 +195,8 @@
                             {% endwith %}
                         </div>
                         <div class="card">
-                            <button type="button" class="add-to-card" data-target="1">добавить в заказы</button>
-                            <div class="pre-order-settings hidden">
+                            <button type="button" class="add-to-card {% if potato in potatoes_favs %} hidden {% endif %}" data-target="1">добавить в заказы</button>
+                            <div class="pre-order-settings {% if potato not in potatoes_favs %}hidden{% endif %}">
                                 <div class="text">Количество</div>
                                 <div class="count">
                                     <div class="count-value">1</div>
@@ -232,15 +232,15 @@
                     <div class="drink-preview">
                         <img src="{{ drinking.preview.url }}"/>
                     </div>
-                    <div class="drink-title">
+                    <div class="drink-title title">
                         {{ drinking.title }}
                     </div>
                     <div class="drink-price">
                         {{ drinking.price }} сом
                     </div>
                     <div class="drink-order-button">
-                        <button type="button" class="add-to-card">Добавить в заказы</button>
-                        <div class="pre-order-settings hidden">
+                        <button type="button" class="add-to-card {% if drinking in drinkings_favs %}hidden{% endif %}">Добавить в заказы</button>
+                        <div class="pre-order-settings {% if drinking not in drinkings_favs %}hidden{% endif %}">
                             <div class="text">Количество</div>
                             <div class="count">
                                 <div class="count-value">1</div>
@@ -251,7 +251,7 @@
                             </div>
                             <div class="done">
                                 <img src="{% static "images/icons/done.png" %}" class="done-trigger"
-                                        data-id="{{ drinking.id }}" data-type="drinking"/>
+                                        data-id="{{ drinking.id }}" data-type="drinking" data-price="{{ drinking.price }}"/>
                             </div>
                         </div>
                     </div>
@@ -269,213 +269,26 @@
             <div class="delimiter"></div>
 
             <div class="table">
-                <div class="row">
-                    <div class="order-col-title">Голень<br/>
-                        (европейский соус)
-                    </div>
-                    <div class="order-col-size">500 гр</div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
+                {% for cart_item in cart_items %}
+                    <div class="row">
+                        <div class="order-col-title">{{ cart_item.title }}<br/>
 
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
+                        </div>
+                        <div class="order-col-size">{% if cart_item.size %} {{ cart_item.size }} {% endif %}</div>
+                        <div class="order-col-count">
+                            <span>Количество</span>
+                            <div class="count">
+                                <div class="count-value">{{ cart_item.quantity }}</div>
+                                <div class="settings-buttons">
+                                    <img src="{% static "images/icons/plus.png" %}" class="plus-trigger"/>
+                                    <img src="{% static "images/icons/minus.png" %}" class="minus-trigger"/>
+                                </div>
                             </div>
                         </div>
+                        <div class="order-col-price">{{ cart_item.price }} сом</div>
+                        <div class="order-col-delete">X</div>
                     </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
-                <div class="row">
-                    <div class="order-col-title">Голень<br/>
-                        (европейский соус)
-                    </div>
-                    <div class="order-col-size">500 гр</div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
-
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
-                <div class="row">
-                    <div class="order-col-title">Голень<br/>
-                        (европейский соус)
-                    </div>
-                    <div class="order-col-size">500 гр</div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
-
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
-                <div class="row">
-                    <div class="order-col-title">Капучино</div>
-                    <div class="order-col-size"></div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
-
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
-                <div class="row">
-                    <div class="order-col-title">Голень<br/>
-                        (европейский соус)
-                    </div>
-                    <div class="order-col-size">500 гр</div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
-
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
-                <div class="row">
-                    <div class="order-col-title">Голень<br/>
-                        (европейский соус)
-                    </div>
-                    <div class="order-col-size">500 гр</div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
-
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
-                <div class="row">
-                    <div class="order-col-title">Голень<br/>
-                        (европейский соус)
-                    </div>
-                    <div class="order-col-size">500 гр</div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
-
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
-                <div class="row">
-                    <div class="order-col-title">Голень<br/>
-                        (европейский соус)
-                    </div>
-                    <div class="order-col-size">500 гр</div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
-
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
-                <div class="row">
-                    <div class="order-col-title">Голень<br/>
-                        (европейский соус)
-                    </div>
-                    <div class="order-col-size">500 гр</div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
-
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
-                <div class="row">
-                    <div class="order-col-title">Голень<br/>
-                        (европейский соус)
-                    </div>
-                    <div class="order-col-size">500 гр</div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
-
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
-                <div class="row">
-                    <div class="order-col-title">Голень<br/>
-                        (европейский соус)
-                    </div>
-                    <div class="order-col-size">500 гр</div>
-                    <div class="order-col-count">
-                        <span>Количество</span>
-
-                        <div class="count">
-                            <div class="count-value">1</div>
-                            <div class="settings-buttons">
-                                <img src="public/images/icons/plus.png" class="plus-trigger"/>
-                                <img src="public/images/icons/minus.png" class="minus-trigger"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-col-price">250 сом</div>
-                    <div class="order-col-delete">X</div>
-                </div>
+                {% endfor %}
             </div>
 
             <div class="score">
@@ -487,7 +300,7 @@
                         </tr>
                         <tr>
                             <td class="left-side">Итого:</td>
-                            <td class="right-side">1000 сом</td>
+                            <td class="right-side">{{ cart_sum }} сом</td>
                         </tr>
                     </table>
                 </div>

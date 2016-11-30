@@ -44,14 +44,18 @@ $(document).ready(function () {
         var type = $(this).attr('data-type');
         var product_info = $('#' + type + '_' + id);
         var quantity = $('div.count-value', product_info).html();
+        var title = $('div.title', product_info).html();
+        var price = null;
         if (type == 'potato' || type == 'chicken') {
             var size = $('li.active', product_info).attr('data-size');
+            price = $('li.active', product_info).attr('data-price');
             cart_item = {
-                id: id, type: type, quantity: quantity, size: size
+                id: id, type: type, quantity: quantity, size: size, price: price, title: title
             };
         } else {
+            price = $(this).attr('data-price');
             cart_item = {
-                id: id, type: type, quantity: quantity
+                id: id, type: type, quantity: quantity, price: price, title: title
             };
         }
 
