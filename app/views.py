@@ -254,6 +254,7 @@ def create_order(request):
     if request.is_ajax():
         cart_items = json.loads(request.COOKIES['cart_items'])
         t = loader.get_template('cart_list_admin.html')
+
         c = dict(cart_items=cart_items)
         content = t.render(c, request)
 
@@ -269,7 +270,12 @@ def create_order(request):
             instance.score = score
             instance.save()
 
-            thread = threading.Thread(target=send_notification_email, args=('Новый заказ', content, EMAIL_TO))
+            t_email = loader.get_template('order_email.html')
+            c_email = dict(cart_items=cart_items, name=instance.name, phone=instance.phone,
+                           address=instance.address, score=score)
+
+            t_content = t_email.render(c_email, request)
+            thread = threading.Thread(target=send_notification_email, args=('Новый заказ', t_content, EMAIL_TO))
             thread.start()
 
             return JsonResponse(dict(success=True))

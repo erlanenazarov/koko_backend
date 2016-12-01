@@ -3,8 +3,8 @@
  */
 
 $(document).ready(function () {
-        $(window).on('scroll', function() {
-        if($(window).scrollTop() > 140) {
+    $(window).on('scroll', function () {
+        if ($(window).scrollTop() > 140) {
             $('.fixed-header').fadeIn('fast');
         } else {
             $('.fixed-header').fadeOut('fast');
@@ -12,8 +12,8 @@ $(document).ready(function () {
     });
 
     var isOpen = false;
-    $('#mobile-menu').on('click', function() {
-        if(!isOpen) {
+    $('#mobile-menu').on('click', function () {
+        if (!isOpen) {
             $('.mobile-fixed-menu').animate({
                 height: 170
             }, 500);
@@ -27,7 +27,7 @@ $(document).ready(function () {
     });
 
     var navigationTrigger = $('.navigation-trigger');
-    $(navigationTrigger).on('click', function(event) {
+    $(navigationTrigger).on('click', function (event) {
         event.preventDefault();
         var block = $(this).attr('href') + '';
         $('body, html').animate({
@@ -38,12 +38,6 @@ $(document).ready(function () {
         }, 500);
         isOpen = false;
     });
-});
-
-var addToCart = $('button[class="add-to-card"]');
-
-$(addToCart).on('click', function() {
-    $('#alert-modal').fadeIn('fast');
 });
 
 // open request modal
@@ -59,9 +53,9 @@ $(closeButton).on('click', function () {
     });
 });
 
-$('.md-alert-close').on('click', function() {
+$('.md-alert-close').on('click', function () {
     $('.md-alert').addClass('close');
-    $('#alert-modal').fadeOut('fast', function() {
+    $('#alert-modal').fadeOut('fast', function () {
         $('.md-alert').removeClass('close');
     });
 });
@@ -189,7 +183,16 @@ $(document).ready(function () {
                         url: cart_list_url,
                         dataType: 'html',
                         success: function (response) {
-                            alert('added');
+                            var alert = $('#alert-modal');
+                            var message = title;
+                            if (size) {
+                                message += ', ' + size;
+                            }
+
+                            message += ', количество: ' + quantity;
+
+                            $('.md-alert-message', alert).html(message);
+                            $(alert).fadeIn('fast');
                             $('.cart_list').html(response);
                             $('.cart_item_plus').click({isPlus: true}, updateCartItemPrice);
                             $('.cart_item_minus').click({isPlus: false}, updateCartItemPrice);
@@ -266,7 +269,8 @@ $(document).ready(function () {
     $('.cart_item_minus').click({isPlus: false}, updateCartItemPrice);
 
     //create order
-    $('#orderForm').on('submit', function(e) {
+    $('#orderForm').on('submit', function (e) {
+        var that = this;
         e.preventDefault();
         $.ajax({
             method: 'POST',
@@ -275,7 +279,15 @@ $(document).ready(function () {
             data: $(this).serialize(),
             success: function (response) {
                 if (response.success) {
-                    alert('order sent!');
+                    $('.md-window').addClass('close');
+                    $('#order-modal').fadeOut('fast', function () {
+                        $('.md-window').removeClass('close');
+                    });
+
+                    var alert = $('#alert-modal');
+                    $('.md-alert-title', alert).html('Заказ отправлен');
+                    $('.md-alert-message', alert).html('Ваша заказ принят!');
+                    $(alert).fadeIn('fast');
                 }
             },
             error: function (e) {
