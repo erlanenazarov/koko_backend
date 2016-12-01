@@ -41,8 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
-    'koko_models',
-    'akoikelov.djazz'
+    'koko_models'
 ]
 
 MIDDLEWARE = [
