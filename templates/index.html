@@ -377,9 +377,6 @@
     </div>
 </div>
 <footer>
-    <button id="connect">
-    connect
-</button>
     <img src="{% static "images/footer-logo.png" %}"/>
 </footer>
 
@@ -400,7 +397,7 @@
 <script src="{% static 'js/core.js' %}"></script>
 <script src="{% static 'js/strophe.js' %}"></script>
 <script>
-    var BOSH_SERVICE = '176.126.167.36:5280/http-bind';
+    var BOSH_SERVICE = 'https://conversejs.org/http-bind/';
     var connection = null;
 
     function onConnect(status) {
@@ -416,7 +413,8 @@
             $('#connect').get(0).value = 'connect';
         } else if (status == Strophe.Status.CONNECTED) {
             console.log('Strophe is connected.');
-            connection.disconnect();
+            sendCustomMessage(connection, 'customer@176.126.167.36', 'administrator@176.126.167.36', 'hello');
+            {#            connection.disconnect();#}
         }
     }
 
@@ -437,6 +435,13 @@
             }
         });
     });
+
+    function sendCustomMessage(connection, to, from, body) {
+        var m = $msg({to: to, from: from, type: 'chat'}).c("body").t(body);
+        // custom data
+        m.up().c("data");
+        connection.send(m);
+    }
 </script>
 </body>
 </html>
