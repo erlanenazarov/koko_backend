@@ -3,13 +3,47 @@
  */
 
 $(document).ready(function () {
-    $(window).on('scroll', function () {
-        if ($(window).scrollTop() >= 100) {
-            $('#fixed-header').fadeIn('fast');
+        $(window).on('scroll', function() {
+        if($(window).scrollTop() > 140) {
+            $('.fixed-header').fadeIn('fast');
         } else {
-            $('#fixed-header').fadeOut('fast');
+            $('.fixed-header').fadeOut('fast');
         }
     });
+
+    var isOpen = false;
+    $('#mobile-menu').on('click', function() {
+        if(!isOpen) {
+            $('.mobile-fixed-menu').animate({
+                height: 170
+            }, 500);
+            isOpen = true;
+        } else {
+            $('.mobile-fixed-menu').animate({
+                height: 0
+            }, 500);
+            isOpen = false;
+        }
+    });
+
+    var navigationTrigger = $('.navigation-trigger');
+    $(navigationTrigger).on('click', function(event) {
+        event.preventDefault();
+        var block = $(this).attr('href') + '';
+        $('body, html').animate({
+            scrollTop: $(block).offset().top
+        }, 800);
+        $('.mobile-fixed-menu').animate({
+            height: 0
+        }, 500);
+        isOpen = false;
+    });
+});
+
+var addToCart = $('button[class="add-to-card"]');
+
+$(addToCart).on('click', function() {
+    $('#alert-modal').fadeIn('fast');
 });
 
 // open request modal
@@ -23,9 +57,69 @@ $(closeButton).on('click', function () {
     $('#order-modal').fadeOut('fast', function () {
         $('.md-window').removeClass('close');
     });
-})
+});
+
+$('.md-alert-close').on('click', function() {
+    $('.md-alert').addClass('close');
+    $('#alert-modal').fadeOut('fast', function() {
+        $('.md-alert').removeClass('close');
+    });
+});
 
 $(document).ready(function () {
+
+    var countTotalSum = function () {
+        var sum = 0;
+        console.log(12);
+        $('.order-col-count > div.count').each(function (index, obj) {
+            var settings = $('.settings-buttons', obj);
+            sum += parseInt($(settings).attr('data-price')) * parseInt($('.count-value', obj).html())
+        }).promise().done(function () {
+            $('td.sum').html(sum + ' сом');
+        });
+    };
+
+    var updateCartItemPrice = function (arg) {
+        var parent = $(this).parent();
+        var id = $(parent).attr('data-id');
+        var type = $(parent).attr('data-type');
+        var size = $(parent).attr('data-size');
+        var quantity = $('div.count-value', $(parent).parent()).html();
+
+        var data = null;
+
+        if (arg.data.isPlus) {
+            ++quantity;
+        } else {
+            --quantity;
+        }
+
+        if (type == 'potato' || type == 'chicken') {
+            data = {
+                id: id, type: type, size: size, quantity: quantity
+            };
+        } else {
+            data = {
+                id: id, type: type, quantity: quantity
+            };
+        }
+
+        $.ajax({
+            method: 'POST',
+            url: cart_item_quantity_url,
+            data: {item: JSON.stringify(data), csrfmiddlewaretoken: csrf},
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    countTotalSum();
+                }
+            },
+            error: function (e) {
+
+            }
+        });
+    }
+
     // add to cart
     $(document).on('click', '.add-to-card', function () {
         $(this).addClass('hidden');
@@ -97,6 +191,8 @@ $(document).ready(function () {
                         success: function (response) {
                             alert('added');
                             $('.cart_list').html(response);
+                            $('.cart_item_plus').click({isPlus: true}, updateCartItemPrice);
+                            $('.cart_item_minus').click({isPlus: false}, updateCartItemPrice);
                         },
                         error: function (e) {
 
@@ -133,12 +229,7 @@ $(document).ready(function () {
                 if (response.success) {
                     $($(that).parent()).fadeOut(300, function () {
                         $(this).remove();
-                        var sum = 0;
-                        $('div.order-col-delete').each(function (index, obj) {
-                            sum += parseInt($(obj).attr('data-price')) * parseInt($(obj).attr('data-quantity'))
-                        }).promise().done(function () {
-                            $('td.sum').html(sum + ' сом');
-                        });
+                        countTotalSum();
                     });
                 }
             },
@@ -168,47 +259,29 @@ $(document).ready(function () {
 
             }
         });
-    })
+    });
 
     // increase/decrease product quantity
-    $('.cart_item_plus').on('click', function () {
-        var parent = $(this).parent();
-        var id = $(parent).attr('data-id');
-        var type = $(parent).attr('data-type');
-        var size = $(parent).attr('data-size');
-        var quantity = $('div.count-value', $(parent).parent()).html();
+    $('.cart_item_plus').click({isPlus: true}, updateCartItemPrice);
+    $('.cart_item_minus').click({isPlus: false}, updateCartItemPrice);
 
-        var data = null;
-        if (type == 'potato' || type == 'chicken') {
-            data = {
-                id: id, type: type, size: size, quantity: ++quantity
-            };
-        } else {
-            data = {
-                id: id, type: type, quantity: ++quantity
-            };
-        }
-
-        console.log(data);
-
+    //create order
+    $('#orderForm').on('submit', function(e) {
+        e.preventDefault();
         $.ajax({
             method: 'POST',
-            url: cart_item_quantity_url,
-            data: {item: JSON.stringify(data), csrfmiddlewaretoken: csrf},
+            url: $(this).attr('action'),
             dataType: 'json',
+            data: $(this).serialize(),
             success: function (response) {
                 if (response.success) {
-                    var sum = 0;
-                    $('div.order-col-delete').each(function (index, obj) {
-                        sum += parseInt($(obj).attr('data-price')) * parseInt($(obj).attr('data-quantity'))
-                    }).promise().done(function () {
-                        $('td.sum').html(sum + ' сом');
-                    });
+                    alert('order sent!');
                 }
             },
             error: function (e) {
 
             }
         });
-    })
+
+    });
 });

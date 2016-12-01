@@ -1,14 +1,20 @@
+# coding=utf-8
 import datetime
 import json
+import threading
+from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
+from django.template import loader
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from KokoChicken import settings
+from koko_models.form import OrderForm
 from koko_models.models import *
+from KokoChicken.settings import *
 
 PRODUCTS_PER_PAGE = 2
 
@@ -55,6 +61,7 @@ def index_page(request):
     params['drinkings_favs'] = drinkings_favs
     params['cart_items'] = cart_items
     params['cart_sum'] = cart_sum
+    params['order_form'] = OrderForm()
 
     return render(request, 'index.html', params)
 
@@ -212,7 +219,6 @@ def set_cart_item_quantity(request):
 
         if item:
             item = json.loads(item)
-            print(item);
             if hasattr(item, 'size'):
                 for cart_item in cart_items:
                     if cart_item['id'] == item['id'] and cart_item['type'] == item['type'] and cart_item['size'] == item['size']:
@@ -244,6 +250,35 @@ def set_cart_item_quantity(request):
         return HttpResponseRedirect(reverse('index'))
 
 
+def create_order(request):
+    if request.is_ajax():
+        cart_items = json.loads(request.COOKIES['cart_items'])
+        t = loader.get_template('cart_list_admin.html')
+        c = dict(cart_items=cart_items)
+        content = t.render(c, request)
+
+        score = 0
+        for cart_item in cart_items:
+            score += float(cart_item['price']) * float(cart_item['quantity'])
+
+        form = OrderForm(request.POST)
+
+        if form.is_valid():
+            instance = form.instance
+            instance.orders = content
+            instance.score = score
+            instance.save()
+
+            thread = threading.Thread(target=send_notification_email, args=('Новый заказ', content, EMAIL_TO))
+            thread.start()
+
+            return JsonResponse(dict(success=True))
+
+        return JsonResponse(dict(success=False))
+    else:
+        return HttpResponseRedirect(reverse('index'))
+
+
 def set_cookie(response, key, value, days_expire=7):
     if days_expire is None:
         max_age = 365 * 24 * 60 * 60  # one year
@@ -254,3 +289,9 @@ def set_cookie(response, key, value, days_expire=7):
     response.set_cookie(key, value, max_age=max_age, expires=expires, domain=settings.SESSION_COOKIE_DOMAIN,
                         secure=settings.SESSION_COOKIE_SECURE or None)
     return response
+
+
+def send_notification_email(title, body, to):
+    email = EmailMessage(title, body=body, to=[to])
+    email.content_subtype = 'html'
+    email.send()

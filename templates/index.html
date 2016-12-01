@@ -25,20 +25,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 <body>
+{% include "message_alert.html" %}
+
 <div class="md-overlay" id="order-modal">
     <div class="md-window">
         <div class="child">
-            <div class="md-close"><img src="public/images/icons/close.png"/></div>
+            <div class="md-close"><img src="{% static "images/icons/close.png" %}"/></div>
             <div class="block-title">Форма доставки</div>
-            <form action="#" method="POST">
+            <form action="{% url "create_order" %}" method="POST" id="orderForm">
+                {% csrf_token %}
                 <div class="form-group">
-                    <input type="text" name="nickname" placeholder="Имя"/>
+                    {{ order_form.name }}
                 </div>
                 <div class="form-group">
-                    <input type="text" name="nickname" placeholder="Адрес"/>
+                    {{ order_form.address }}
                 </div>
                 <div class="form-group">
-                    <input type="text" name="nickname" placeholder="Телефон"/>
+                    {{ order_form.phone }}
+                    {{ order_form.orders }}
                 </div>
                 <div class="order-button">
                     <button type="submit">Отправить</button>
@@ -47,26 +51,34 @@
         </div>
     </div>
 </div>
-<div class="pre-header" id="fixed-header">
-    <div class="pre-header-center">
-        <div class="navigation-menu">
+<div class="fixed-header">
+    <div class="fixed-menu">
+        <ul>
+            <li><a href="#main-products" class="navigation-trigger">главное</a></li>
+            <li><a href="#special-products" class="navigation-trigger">специальное</a></li>
+            <li><a href="#potato-products" class="navigation-trigger">картофель</a></li>
+            <li><a href="#drink-products" class="navigation-trigger">напитки</a></li>
+            <li><a href="#order-list" class="navigation-trigger">корзина</a></li>
+        </ul>
+    </div>
+</div>
+<div class="mobile-fixed-header">
+    <div class="child">
+        <div class="mobile-fixed-menu-trigger" id="mobile-menu">меню</div>
+        <div class="mobile-fixed-menu score">
             <ul>
-                <li><a href="#">главная</a></li>
-                <li><a href="#">блюды</a></li>
-                <li><a href="#">меню</a></li>
-                <li><a href="#">контакты</a></li>
+                <li><a href="#main-products" class="navigation-trigger">главное</a></li>
+                <li><a href="#special-products" class="navigation-trigger">специальное</a></li>
+                <li><a href="#potato-products" class="navigation-trigger">картофель</a></li>
+                <li><a href="#drink-products" class="navigation-trigger">напитки</a></li>
+                <li><a href="#order-list" class="navigation-trigger">корзина</a></li>
             </ul>
         </div>
     </div>
-
-    <a href="#">
-        <div class="order-block-text">
-            мои заказы
-        </div>
-    </a>
 </div>
+<div class="mobile-fixed-header-placeholder"></div>
 <header>
-    <div class="carcass">
+<div class="carcass">
         <div class="logo"></div>
         <div class="header-center-wrap">
             <div class="child">
@@ -75,28 +87,29 @@
                 </div>
                 <div class="navigation-menu">
                     <ul>
-                        <li><a href="#">главная</a></li>
-                        <li><a href="#">блюды</a></li>
-                        <li><a href="#">меню</a></li>
-                        <li><a href="#">контакты</a></li>
+                        <li><a href="#main-products" class="navigation-trigger">главное</a></li>
+                        <li><a href="#special-products" class="navigation-trigger">специальное</a></li>
+                        <li><a href="#potato-products" class="navigation-trigger">картофель</a></li>
+                        <li><a href="#drink-products" class="navigation-trigger">напитки</a></li>
+{#                        <li><a href="#order-list" class="navigation-trigger">корзина</a></li>#}
                     </ul>
                 </div>
             </div>
         </div>
-        <a href="#">
+        <a href="#order-list" class="navigation-trigger">
             <div class="order-block">
                 <div class="order-block-icon">
-                    <img src="{% static 'images/orders-icon.svg' %}"/>
+                    <img src="{% static "images/orders-icon.svg" %}"/>
                 </div>
                 <div class="order-block-text">
-                    мои заказы
+                     мои заказы
                 </div>
             </div>
         </a>
     </div>
 </header>
 <div class="header-image"></div>
-<div class="main-products">
+<div class="main-products" id="main-products">
     <div class="carcass">
         <div class="main-products-carcass" id="main-menu-products">
             {% for chicken in chickens %}
@@ -147,7 +160,7 @@
         </div>
     </div>
 </div>
-<div class="special-menu score">
+<div class="special-menu score" id="special-products">
     <div class="carcass">
         <div class="block-title">Специальное меню</div>
         <div class="delimiter"></div>
@@ -190,7 +203,7 @@
         </div>
     </div>
 </div>
-<div class="special-menu score">
+<div class="special-menu score" id="potato-products">
     <div class="carcass">
         <div class="block-title">Картофель</div>
         <div class="delimiter"></div>
@@ -244,7 +257,7 @@
         </div>
     </div>
 </div>
-<div class="drink-menu">
+<div class="drink-menu" id="drink-products">
     <div class="carcass">
         <div class="block-title">Выбрать напитки</div>
         <div class="delimiter"></div>
@@ -288,7 +301,7 @@
         <div class="free-space"></div>
     </div>
 </div>
-<div class="order">
+<div class="order" id="order-list">
     <div class="carcass">
         <div class="order-dashboard score">
             <div class="block-title">Мои заказы</div>
@@ -304,6 +317,59 @@
         </div>
     </div>
 </div>
+<div class="contacts" id="contacts">
+    <div class="carcass">
+        <div class="block-title">Контакты</div>
+        <div class="delimiter"></div>
+        <div class="pre-contacts">
+            <ul>
+                <li class="score">
+                    <div class="contact-icon"><img src="{% static "images/icons/phone.png" %}"/></div>
+                    <div class="contact-text">+996 312 49 27 88<br/>
+                        +996 312 49 27 86
+                    </div>
+                </li>
+                <li class="score">
+                    <div class="contact-icon"><img src="{% static "images/icons/mail.png" %}"/></div>
+                    <div class="contact-text">koko@koko.chicken.kg</div>
+                </li>
+                <li class="score">
+                    <div class="contact-icon"><img src="{% static "images/icons/location.png" %}"/></div>
+                    <div class="contact-text">ул. Чуй - проспект Мира<br/>
+                        (ТЦ Beta Stores 1)
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="contacts-map">
+            <div class="post-contacts">
+                <ul>
+                    <li class="score">
+                        <div class="contact-icon"><img src="{% static "images/icons/phone.png" %}"/></div>
+                        <div class="contact-text">+996 312 49 27 88<br/>
+                            +996 312 49 27 86
+                        </div>
+                    </li>
+                    <li class="score">
+                        <div class="contact-icon"><img src="{% static "images/icons/mail.png" %}"/></div>
+                        <div class="contact-text">koko@koko.chicken.kg</div>
+                    </li>
+                    <li class="score">
+                        <div class="contact-icon"><img src="{% static "images/icons/location.png" %}"/></div>
+                        <div class="contact-text">ул. Чуй - проспект Мира<br/>
+                            (ТЦ Beta Stores 1)
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d730.9631691261975!2d74.59226710538918!3d42.87595358119684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDLCsDUyJzMzLjgiTiA3NMKwMzUnMzIuOSJF!5e0!3m2!1sru!2skg!4v1480498412190"
+                    width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+<footer>
+    <img src="{% static "images/footer-logo.png" %}"/>
+</footer>
 
 <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 <script>

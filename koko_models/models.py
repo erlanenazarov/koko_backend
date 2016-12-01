@@ -79,3 +79,23 @@ class DrinkingProduct(models.Model):
         return self.title
 
 
+class Order(models.Model):
+    class Meta:
+        verbose_name_plural = 'Заказы'
+        verbose_name = 'Заказ'
+
+    name = models.CharField(verbose_name='Имя', max_length=500, unique=False, null=False)
+    address = models.CharField(verbose_name='Адрес', max_length=500, unique=False, null=False)
+    phone = models.CharField(verbose_name='Телефон', max_length=255, unique=False, null=False)
+    orders = models.TextField(verbose_name='Элементы заказа', null=False)
+    delivered = models.BooleanField(verbose_name='Доставлено?', default=False)
+    score = models.FloatField(verbose_name='Итого', null=False, default=0)
+
+    def orders_html(self):
+        return self.orders
+
+    orders_html.short_description = 'Элементы заказа'
+    orders_html.allow_tags = True
+
+    def __unicode__(self):
+        return '%s - %s' % (self.name, self.phone)
