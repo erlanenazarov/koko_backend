@@ -1,20 +1,33 @@
-<table>
-    <thead>
-        <tr>
-            <td>Наименование</td>
-            <td>Объем</td>
-            <td>Количество</td>
-            <td>Стоимость</td>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in cart_items %}
-            <tr>
-                <td>{{ item.title }}</td>
-                <td>{% if item.size%} {{ item.size }} {% endif %}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.price }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="box">
+    <a href="#popup_{{ id }}">Элементы заказа</a>
+</div>
+
+<div id="popup_{{ id }}" class="overlay">
+    <div class="popup-list">
+        <h2>Элементы заказа</h2>
+        <a class="close" href="#">&times;</a>
+
+        <div class="content">
+            <table>
+                <thead>
+                <tr>
+                    <td>Наименование</td>
+                    <td>Объем</td>
+                    <td>Количество</td>
+                    <td>Стоимость</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.title }}</td>
+                        <td>{% if item.size %} {{ item.size }} {% endif %}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.price }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
