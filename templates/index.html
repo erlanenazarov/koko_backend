@@ -80,7 +80,7 @@
 </div>
 <div class="mobile-fixed-header-placeholder"></div>
 <header>
-<div class="carcass">
+    <div class="carcass">
         <div class="logo"></div>
         <div class="header-center-wrap">
             <div class="child">
@@ -103,7 +103,7 @@
                     <img src="{% static "images/orders-icon.svg" %}"/>
                 </div>
                 <div class="order-block-text">
-                     мои заказы
+                    мои заказы
                 </div>
             </div>
         </a>
@@ -126,8 +126,9 @@
                                 <ul>
                                     {% for size in sizes %}
                                         <li
-                                            class="price-switch {% if size == sizes|first %}active{% endif %}"
-                                            data-price="{{ size.price }}" data-size="{{ size.title }}">{{ size.title }}</li>
+                                                class="price-switch {% if size == sizes|first %}active{% endif %}"
+                                                data-price="{{ size.price }}"
+                                                data-size="{{ size.title }}">{{ size.title }}</li>
                                     {% endfor %}
                                 </ul>
                                 {% if sizes|length > 0 %}
@@ -136,7 +137,9 @@
                             {% endwith %}
                         </div>
                         <div class="card">
-                            <button type="button" class="add-to-card" data-target="1" {% if chicken in chicken_favs %} hidden {% endif %}>добавить в заказы</button>
+                            <button type="button" class="add-to-card" data-target="1" {% if chicken in chicken_favs %}
+                                    hidden {% endif %}>добавить в заказы
+                            </button>
                             <div class="pre-order-settings {% if chicken not in chicken_favs %}hidden{% endif %}">
                                 <div class="text">Количество</div>
                                 <div class="count">
@@ -148,7 +151,7 @@
                                 </div>
                                 <div class="done">
                                     <img src="{% static "images/icons/done.png" %}" class="done-trigger"
-                                                 data-id="{{ chicken.id }}" data-type="chicken"/>
+                                         data-id="{{ chicken.id }}" data-type="chicken"/>
                                 </div>
                             </div>
                         </div>
@@ -178,7 +181,10 @@
                             <div class="price-value">{{ salade.price }} сом</div>
                         </div>
                         <div class="card">
-                            <button type="button" class="add-to-card {% if salade in salades_favs %} hidden {% endif %}">добавить в заказы</button>
+                            <button type="button"
+                                    class="add-to-card {% if salade in salades_favs %} hidden {% endif %}">добавить в
+                                заказы
+                            </button>
                             <div class="pre-order-settings {% if salade not in salades_favs %}hidden {% endif %}">
                                 <div class="text">Количество</div>
                                 <div class="count">
@@ -190,7 +196,7 @@
                                 </div>
                                 <div class="done">
                                     <img src="{% static "images/icons/done.png" %}" class="done-trigger"
-                                            data-id="{{ salade.id }}" data-type="salade" data-price="{{ salade.price }}"/>
+                                         data-id="{{ salade.id }}" data-type="salade" data-price="{{ salade.price }}"/>
                                 </div>
                             </div>
                         </div>
@@ -209,7 +215,7 @@
         <div class="delimiter"></div>
         <div class="main-products-carcass">
             {% for potato in potatoes %}
-                <div class="product" >
+                <div class="product">
                     <div class="product-image-preview">
                         <img src="{{ potato.preview.url }}"/>
                     </div>
@@ -222,7 +228,8 @@
                                     {% for size in sizes %}
                                         <li data-id="{{ potato.id }}"
                                             class="price-switch {% if size == sizes|first %}active{% endif %}"
-                                            data-price="{{ size.price }}" data-size="{{ size.title }}">{{ size.title }}</li>
+                                            data-price="{{ size.price }}"
+                                            data-size="{{ size.title }}">{{ size.title }}</li>
                                     {% endfor %}
                                 </ul>
                                 {% if sizes|length > 0 %}
@@ -231,7 +238,10 @@
                             {% endwith %}
                         </div>
                         <div class="card">
-                            <button type="button" class="add-to-card {% if potato in potatoes_favs %} hidden {% endif %}" data-target="1">добавить в заказы</button>
+                            <button type="button"
+                                    class="add-to-card {% if potato in potatoes_favs %} hidden {% endif %}"
+                                    data-target="1">добавить в заказы
+                            </button>
                             <div class="pre-order-settings {% if potato not in potatoes_favs %}hidden{% endif %}">
                                 <div class="text">Количество</div>
                                 <div class="count">
@@ -243,7 +253,7 @@
                                 </div>
                                 <div class="done">
                                     <img src="{% static "images/icons/done.png" %}" class="done-trigger"
-                                            data-id="{{ potato.id }}" data-type="potato"/>
+                                         data-id="{{ potato.id }}" data-type="potato"/>
                                 </div>
                             </div>
                         </div>
@@ -264,7 +274,8 @@
             изысканный вкус горячей курицы
         </div>
 
-        <div class="drink-products-carcass slick-init" id="drink-list" data-slick='{"slidesToShow": 4, "slidesToScroll": 1}'>
+        <div class="drink-products-carcass slick-init" id="drink-list"
+             data-slick='{"slidesToShow": 4, "slidesToScroll": 1}'>
             {% for drinking in drinkings %}
                 <div class="drink-product" id="drinking_{{ drinking.id }}">
                     <div class="drink-preview">
@@ -277,7 +288,9 @@
                         {{ drinking.price }} сом
                     </div>
                     <div class="drink-order-button">
-                        <button type="button" class="add-to-card {% if drinking in drinkings_favs %}hidden{% endif %}">Добавить в заказы</button>
+                        <button type="button" class="add-to-card {% if drinking in drinkings_favs %}hidden{% endif %}">
+                            Добавить в заказы
+                        </button>
                         <div class="pre-order-settings {% if drinking not in drinkings_favs %}hidden{% endif %}">
                             <div class="text">Количество</div>
                             <div class="count">
@@ -289,7 +302,8 @@
                             </div>
                             <div class="done">
                                 <img src="{% static "images/icons/done.png" %}" class="done-trigger"
-                                        data-id="{{ drinking.id }}" data-type="drinking" data-price="{{ drinking.price }}"/>
+                                     data-id="{{ drinking.id }}" data-type="drinking"
+                                     data-price="{{ drinking.price }}"/>
                             </div>
                         </div>
                     </div>
@@ -363,6 +377,9 @@
     </div>
 </div>
 <footer>
+    <button id="connect">
+    connect
+</button>
     <img src="{% static "images/footer-logo.png" %}"/>
 </footer>
 
@@ -381,5 +398,45 @@
 
 </script>
 <script src="{% static 'js/core.js' %}"></script>
+<script src="{% static 'js/strophe.js' %}"></script>
+<script>
+    var BOSH_SERVICE = '176.126.167.36:5280/http-bind';
+    var connection = null;
+
+    function onConnect(status) {
+        if (status == Strophe.Status.CONNECTING) {
+            console.log('Strophe is connecting.');
+        } else if (status == Strophe.Status.CONNFAIL) {
+            console.log('Strophe failed to connect.');
+            $('#connect').get(0).value = 'connect';
+        } else if (status == Strophe.Status.DISCONNECTING) {
+            console.log('Strophe is disconnecting.');
+        } else if (status == Strophe.Status.DISCONNECTED) {
+            console.log('Strophe is disconnected.');
+            $('#connect').get(0).value = 'connect';
+        } else if (status == Strophe.Status.CONNECTED) {
+            console.log('Strophe is connected.');
+            connection.disconnect();
+        }
+    }
+
+    $(document).ready(function () {
+        connection = new Strophe.Connection(BOSH_SERVICE);
+
+        $('#connect').bind('click', function () {
+            var button = $('#connect').get(0);
+            if (button.value == 'connect') {
+                button.value = 'disconnect';
+
+                connection.connect('administrator@176.126.167.36',
+                        'Afrodita97',
+                        onConnect);
+            } else {
+                button.value = 'connect';
+                connection.disconnect();
+            }
+        });
+    });
+</script>
 </body>
 </html>
