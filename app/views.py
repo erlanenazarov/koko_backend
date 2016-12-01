@@ -253,10 +253,6 @@ def set_cart_item_quantity(request):
 def create_order(request):
     if request.is_ajax():
         cart_items = json.loads(request.COOKIES['cart_items'])
-        t = loader.get_template('cart_list_admin.html')
-
-        c = dict(cart_items=cart_items)
-        content = t.render(c, request)
 
         score = 0
         for cart_item in cart_items:
@@ -266,8 +262,15 @@ def create_order(request):
 
         if form.is_valid():
             instance = form.instance
-            instance.orders = content
             instance.score = score
+            instance.save()
+
+            t = loader.get_template('cart_list_admin.html')
+
+            c = dict(cart_items=cart_items, id=instance.id)
+            content = t.render(c, request)
+
+            instance.orders = content
             instance.save()
 
             t_email = loader.get_template('order_email.html')
