@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>Koko-Chicken</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/slick.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/slick-theme.css' %}"/>
     <link rel="apple-touch-icon" sizes="57x57" href="{% static 'favicon/apple-icon-57x57.png' %}">
     <link rel="apple-touch-icon" sizes="60x60" href="{% static 'favicon/apple-icon-60x60.png' %}">
     <link rel="apple-touch-icon" sizes="72x72" href="{% static 'favicon/apple-icon-72x72.png' %}">
@@ -83,7 +85,7 @@
         <div class="header-center-wrap">
             <div class="child">
                 <div class="delivery-text">
-                    Доставка по бишкеку <span>0 777 56 32 12</span>
+                    Доставка по бишкеку <span>{{ phone }}</span>
                 </div>
                 <div class="navigation-menu">
                     <ul>
@@ -91,7 +93,6 @@
                         <li><a href="#special-products" class="navigation-trigger">специальное</a></li>
                         <li><a href="#potato-products" class="navigation-trigger">картофель</a></li>
                         <li><a href="#drink-products" class="navigation-trigger">напитки</a></li>
-{#                        <li><a href="#order-list" class="navigation-trigger">корзина</a></li>#}
                     </ul>
                 </div>
             </div>
@@ -164,7 +165,6 @@
     <div class="carcass">
         <div class="block-title">Специальное меню</div>
         <div class="delimiter"></div>
-        <div class="block-description">Lorem ipsum dolor it amet dolor</div>
         <div class="main-products-carcass">
             {% for salade in salades %}
                 <div class="product">
@@ -207,7 +207,6 @@
     <div class="carcass">
         <div class="block-title">Картофель</div>
         <div class="delimiter"></div>
-        <div class="block-description">Lorem ipsum dolor it amet dolor</div>
         <div class="main-products-carcass">
             {% for potato in potatoes %}
                 <div class="product" >
@@ -265,7 +264,7 @@
             изысканный вкус горячей курицы
         </div>
 
-        <div class="drink-products-carcass">
+        <div class="drink-products-carcass slick-init" id="drink-list" data-slick='{"slidesToShow": 4, "slidesToScroll": 1}'>
             {% for drinking in drinkings %}
                 <div class="drink-product" id="drinking_{{ drinking.id }}">
                     <div class="drink-preview">
@@ -325,19 +324,17 @@
             <ul>
                 <li class="score">
                     <div class="contact-icon"><img src="{% static "images/icons/phone.png" %}"/></div>
-                    <div class="contact-text">+996 312 49 27 88<br/>
-                        +996 312 49 27 86
+                    <div class="contact-text">{{ phone }}<br/>
+                        {{ additional_phone }}
                     </div>
                 </li>
                 <li class="score">
                     <div class="contact-icon"><img src="{% static "images/icons/mail.png" %}"/></div>
-                    <div class="contact-text">koko@koko.chicken.kg</div>
+                    <div class="contact-text">{{ email }}</div>
                 </li>
                 <li class="score">
                     <div class="contact-icon"><img src="{% static "images/icons/location.png" %}"/></div>
-                    <div class="contact-text">ул. Чуй - проспект Мира<br/>
-                        (ТЦ Beta Stores 1)
-                    </div>
+                    <div class="contact-text">{{ address }}</div>
                 </li>
             </ul>
         </div>
@@ -346,19 +343,17 @@
                 <ul>
                     <li class="score">
                         <div class="contact-icon"><img src="{% static "images/icons/phone.png" %}"/></div>
-                        <div class="contact-text">+996 312 49 27 88<br/>
-                            +996 312 49 27 86
+                        <div class="contact-text">{{ phone }}<br/>
+                            {{ additional_phone }}
                         </div>
                     </li>
                     <li class="score">
                         <div class="contact-icon"><img src="{% static "images/icons/mail.png" %}"/></div>
-                        <div class="contact-text">koko@koko.chicken.kg</div>
+                        <div class="contact-text">{{ email }}</div>
                     </li>
                     <li class="score">
                         <div class="contact-icon"><img src="{% static "images/icons/location.png" %}"/></div>
-                        <div class="contact-text">ул. Чуй - проспект Мира<br/>
-                            (ТЦ Beta Stores 1)
-                        </div>
+                        <div class="contact-text">{{ address }}</div>
                     </li>
                 </ul>
             </div>
@@ -372,6 +367,7 @@
 </footer>
 
 <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'js/slick.js' %}"></script>
 <script>
 
     var add_to_cart_url = '{% url "add_to_cart" %}';

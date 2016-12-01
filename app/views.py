@@ -24,7 +24,17 @@ def generate_view_params():
 
 
 def index_page(request):
-    params = {}
+    contacts = Contacts.objects.all().first()
+    phone = contacts.phone_number
+    additional_phone = contacts.additional_phone_number
+    email = contacts.email
+    address = contacts.address
+    params = {
+        'phone': phone,
+        'additional_phone': additional_phone,
+        'email': email,
+        'address': address
+    }
 
     if 'cart_items' in request.COOKIES:
         cart_items = json.loads(request.COOKIES['cart_items'])

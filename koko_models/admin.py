@@ -8,6 +8,7 @@ admin.site.register(ProductSizes)
 admin.site.register(PotatoProduct)
 admin.site.register(SaladeProduct)
 admin.site.register(DrinkingProduct)
+admin.site.register(Contacts)
 
 
 class OrderAdmin(admin.ModelAdmin):

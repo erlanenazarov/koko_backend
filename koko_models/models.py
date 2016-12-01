@@ -99,3 +99,18 @@ class Order(models.Model):
 
     def __unicode__(self):
         return '%s - %s' % (self.name, self.phone)
+
+
+class Contacts(models.Model):
+    class Meta:
+        db_table = 'contacts'
+        verbose_name = 'Контакты'
+        verbose_name_plural = 'Контакты'
+    phone_number = models.CharField(max_length=255, verbose_name='Номер телефона')
+    additional_phone_number = models.CharField(max_length=255, verbose_name='Запасной номер телефона', null=True, blank=True)
+    email = models.EmailField(verbose_name='Эл. почта')
+    address = models.CharField(max_length=255, verbose_name='Адрес')
+
+    def __unicode__(self):
+        return self.phone_number + ', ' + self.address
+

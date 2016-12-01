@@ -9,6 +9,11 @@ $(document).ready(function () {
         } else {
             $('.fixed-header').fadeOut('fast');
         }
+
+        // var slickSlider = $('.slick-slide');
+        // $(slickSlider).animate({
+        //     width: $(slickSlider).width()
+        // }, 50);
     });
 
     var isOpen = false;
@@ -295,5 +300,15 @@ $(document).ready(function () {
             }
         });
 
+    });
+
+    $('#drink-list').slick({
+        infinite: true,
+        arrows: true,
+        autoplay: true,
+        speed: 500,
+        mobileFirst: true,
+        swipeToSlide: true,
+        variableWidth: true
     });
 });

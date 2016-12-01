@@ -610,9 +610,9 @@ a .order-block:hover > .order-block-icon > img {
     vertical-align: top;
 }
 
-.drink-product:nth-child(4n) {
-    margin-right: 0;
-}
+/*.drink-product:nth-child(4n) {*/
+    /*margin-right: 0;*/
+/*}*/
 
 .drink-preview {
     width: 270px;
@@ -1003,6 +1003,7 @@ a .order-block:hover > .order-block-icon > img {
     font-size: 16px;
     color: #FFFFFF;
     vertical-align: top;
+    width: 220px;
 }
 
 .post-contacts ul li div:first-child {
@@ -1391,9 +1392,9 @@ footer > img {
         width: 901px;
     }
 
-    .drink-product:nth-child(3n) {
-        margin-right: 0;
-    }
+    /*.drink-product:nth-child(3n) {*/
+        /*margin-right: 0;*/
+    /*}*/
 }
 
 @media screen and (max-width: 1031px) {
