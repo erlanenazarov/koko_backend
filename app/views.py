@@ -16,7 +16,7 @@ from koko_models.form import OrderForm
 from koko_models.models import *
 from KokoChicken.settings import *
 
-PRODUCTS_PER_PAGE = 2
+PRODUCTS_PER_PAGE = 4
 
 
 def generate_view_params():
