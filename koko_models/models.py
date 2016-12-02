@@ -89,6 +89,7 @@ class Order(models.Model):
     phone = models.CharField(verbose_name='Телефон', max_length=255, unique=False, null=False)
     orders = models.TextField(verbose_name='Элементы заказа', null=False)
     delivered = models.BooleanField(verbose_name='Доставлено?', default=False)
+    accepted = models.BooleanField(verbose_name='Принято?', default=False)
     score = models.FloatField(verbose_name='Итого', null=False, default=0)
 
     def orders_html(self):
@@ -114,3 +115,6 @@ class Contacts(models.Model):
     def __unicode__(self):
         return self.phone_number + ', ' + self.address
 
+
+from koko_models.signals import post_order
+models.signals.post_save.connect(post_order, sender=Order)

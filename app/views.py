@@ -285,7 +285,7 @@ def create_order(request):
 
             t_email = loader.get_template('order_email.html')
             c_email = dict(cart_items=cart_items, name=instance.name, phone=instance.phone,
-                           address=instance.address, score=score)
+                           address=instance.address, score=score, id=instance.id)
 
             t_content = t_email.render(c_email, request)
             thread = threading.Thread(target=send_notification_email, args=('Новый заказ', t_content, EMAIL_TO))

@@ -69,7 +69,6 @@ $(document).ready(function () {
 
     var countTotalSum = function () {
         var sum = 0;
-        console.log(12);
         $('.order-col-count > div.count').each(function (index, obj) {
             var settings = $('.settings-buttons', obj);
             sum += parseInt($(settings).attr('data-price')) * parseInt($('.count-value', obj).html())

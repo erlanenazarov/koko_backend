@@ -12,9 +12,9 @@ admin.site.register(Contacts)
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_editable = ['delivered']
-    list_display = ['name', 'address', 'phone', 'orders_html', 'score', 'delivered']
-    list_filter = ['delivered', 'name', 'phone']
+    list_editable = ['delivered', 'accepted']
+    list_display = ['name', 'address', 'phone', 'orders_html', 'score', 'accepted', 'delivered']
+    list_filter = ['delivered', 'accepted', 'name', 'phone']
 
 admin.site.register(Order, OrderAdmin)
 
