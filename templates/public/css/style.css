@@ -964,10 +964,12 @@ a .order-block:hover > .order-block-icon > img {
     font-size: 16px;
     color: #080808;
     vertical-align: top;
+    width: 133px;
 }
 
 .pre-contacts ul li div:first-child {
     margin-right: 20px;
+    width: 30px;
 }
 
 .post-contacts {
@@ -1003,11 +1005,12 @@ a .order-block:hover > .order-block-icon > img {
     font-size: 16px;
     color: #FFFFFF;
     vertical-align: top;
-    width: 220px;
+    width: 133px;
 }
 
 .post-contacts ul li div:first-child {
     margin-right: 20px;
+    width: 30px;
 }
 
 footer {
@@ -1324,6 +1327,14 @@ footer > img {
 @media screen and (max-width: 1233px) {
     .carcass {
         width: 1129px;
+    }
+
+    .order-dashboard {
+        width: 1155px;
+    }
+
+    .drink-product-carcass {
+        width: 1166px;
     }
 
     .product {
