@@ -274,6 +274,8 @@ $(document).ready(function () {
     $('.cart_item_plus').click({isPlus: true}, updateCartItemPrice);
     $('.cart_item_minus').click({isPlus: false}, updateCartItemPrice);
 
+    var connection = null;
+
     //create order
     $('#orderForm').on('submit', function (e) {
         e.preventDefault();
@@ -294,21 +296,23 @@ $(document).ready(function () {
                     $('.md-alert-message', alert).html('Ваша заказ принят!');
                     $(alert).fadeIn('fast');
 
-                    var connection = new Strophe.Connection(BOSH_SERVICE);
+                    connection = new Strophe.Connection(BOSH_SERVICE);
                     connection.connect('customer@176.126.167.36', 'Afrodita97', function (status) {
-                        if (status == Strophe.Connection.CONNECTED) {
-                            connection.send($pres().tree());
-                            var message = $msg({
-                                to: 'administrator@176.126.167.36',
-                                from: 'customer@176.126.167.36',
-                                type: 'chat'
-                            }).c("body").t('new-order');
-                            connection.send(message);
-                            connection.disconnect();
+                            if (status == Strophe.Status.CONNECTED) {
+                                connection.send($pres().tree());
+                                var message = $msg({
+                                    to: 'administrator@176.126.167.36',
+                                    from: 'customer@176.126.167.36',
+                                    type: 'chat'
+                                }).c("body").t('new-order');
+                                message.up().c("data");
+                                connection.send(message);
+                            }
                         }
-                    })
+                    )
                 }
-            },
+            }
+            ,
             error: function (e) {
 
             }
@@ -316,6 +320,11 @@ $(document).ready(function () {
 
     });
 
+    window.onbeforeunload = function (e) {
+        if (connection) {
+            connection.disconnect();
+        }
+    };
     $('#drink-list').slick({
         infinite: true,
         arrows: true,

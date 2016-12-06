@@ -1,4 +1,5 @@
 {% extends "admin/base.html" %}
+{% load staticfiles %}
 {% block extrastyle %}
     <style>
         .box {
@@ -74,4 +75,37 @@
             }
         }
     </style>
+{% endblock %}
+{% block footer %}
+    {{ block.super }}
+    <script src="{% static "js/strophe.js" %}"></script>
+    <script>
+        var BOSH_SERVICE = 'http://176.126.167.36:5280/http-bind';
+        var whatsAppPath = '{% static "whatsapp.mp3" %}';
+        var connection = new Strophe.Connection(BOSH_SERVICE);
+        var alertTimeout = null;
+        var audio = new Audio(whatsAppPath);
+        connection.connect('administrator@176.126.167.36', 'Afrodita97', function (status) {
+                    if (status == Strophe.Status.CONNECTED) {
+                        connection.send($pres().tree());
+                        connection.addHandler(function (msg) {
+                            alertTimeout = setInterval(function () {
+                                audio.play();
+                            }, 3000);
+
+                            return true;
+                        }, null, 'message', 'chat', null, null);
+                    }
+                }
+        );
+        document.onclick = function () {
+            clearInterval(alertTimeout);
+            audio.pause();
+        };
+        window.onbeforeunload = function (e) {
+            if (connection) {
+                connection.disconnect();
+            }
+        };
+    </script>
 {% endblock %}
