@@ -2,6 +2,8 @@
  * Created by Эрлан on 25.11.2016.
  */
 
+var BOSH_SERVICE = 'http://176.126.167.36:5280/http-bind';
+
 $(document).ready(function () {
     $(window).on('scroll', function () {
         if ($(window).scrollTop() > 140) {
@@ -274,7 +276,6 @@ $(document).ready(function () {
 
     //create order
     $('#orderForm').on('submit', function (e) {
-        var that = this;
         e.preventDefault();
         $.ajax({
             method: 'POST',
@@ -292,6 +293,20 @@ $(document).ready(function () {
                     $('.md-alert-title', alert).html('Заказ отправлен');
                     $('.md-alert-message', alert).html('Ваша заказ принят!');
                     $(alert).fadeIn('fast');
+
+                    var connection = new Strophe.Connection(BOSH_SERVICE);
+                    connection.connect('customer@176.126.167.36', 'Afrodita97', function (status) {
+                        if (status == Strophe.Connection.CONNECTED) {
+                            connection.send($pres().tree());
+                            var message = $msg({
+                                to: 'administrator@176.126.167.36',
+                                from: 'customer@176.126.167.36',
+                                type: 'chat'
+                            }).c("body").t('new-order');
+                            connection.send(message);
+                            connection.disconnect();
+                        }
+                    })
                 }
             },
             error: function (e) {

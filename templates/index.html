@@ -396,54 +396,7 @@
     var openButton = $('#order-button');
 
 </script>
-<script src="{% static 'js/core.js' %}"></script>
 <script src="{% static 'js/strophe.js' %}"></script>
-<script>
-    var BOSH_SERVICE = 'https://conversejs.org/http-bind/';
-    var connection = null;
-
-    function onConnect(status) {
-        if (status == Strophe.Status.CONNECTING) {
-            console.log('Strophe is connecting.');
-        } else if (status == Strophe.Status.CONNFAIL) {
-            console.log('Strophe failed to connect.');
-            $('#connect').get(0).value = 'connect';
-        } else if (status == Strophe.Status.DISCONNECTING) {
-            console.log('Strophe is disconnecting.');
-        } else if (status == Strophe.Status.DISCONNECTED) {
-            console.log('Strophe is disconnected.');
-            $('#connect').get(0).value = 'connect';
-        } else if (status == Strophe.Status.CONNECTED) {
-            console.log('Strophe is connected.');
-            sendCustomMessage(connection, 'customer@176.126.167.36', 'administrator@176.126.167.36', 'hello');
-            {#            connection.disconnect();#}
-        }
-    }
-
-    $(document).ready(function () {
-        connection = new Strophe.Connection(BOSH_SERVICE);
-
-        $('#connect').bind('click', function () {
-            var button = $('#connect').get(0);
-            if (button.value == 'connect') {
-                button.value = 'disconnect';
-
-                connection.connect('administrator@176.126.167.36',
-                        'Afrodita97',
-                        onConnect);
-            } else {
-                button.value = 'connect';
-                connection.disconnect();
-            }
-        });
-    });
-
-    function sendCustomMessage(connection, to, from, body) {
-        var m = $msg({to: to, from: from, type: 'chat'}).c("body").t(body);
-        // custom data
-        m.up().c("data");
-        connection.send(m);
-    }
-</script>
+<script src="{% static 'js/core.js' %}"></script>
 </body>
 </html>

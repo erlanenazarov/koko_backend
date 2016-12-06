@@ -25,9 +25,9 @@ _PATH = os.path.abspath(os.path.dirname(__file__))
 SECRET_KEY = 's7m791be+n*@3+4990he0!blp*k1x%liq#!1j*c%shxk=34rvp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
