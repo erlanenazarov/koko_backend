@@ -78,6 +78,7 @@
 {% endblock %}
 {% block footer %}
     {{ block.super }}
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
     <script src="{% static "js/strophe.js" %}"></script>
     <script>
         var BOSH_SERVICE = 'http://176.126.167.36:5280/http-bind';
@@ -85,6 +86,10 @@
         var connection = new Strophe.Connection(BOSH_SERVICE);
         var alertTimeout = null;
         var audio = new Audio(whatsAppPath);
+        var page_title = $('title');
+        var page_title_content = $(page_title).html();
+        var title_changer = null;
+        var helper = true;
         connection.connect('administrator@176.126.167.36', 'Afrodita97', function (status) {
                     if (status == Strophe.Status.CONNECTED) {
                         connection.send($pres().tree());
@@ -92,7 +97,15 @@
                             alertTimeout = setInterval(function () {
                                 audio.play();
                             }, 3000);
-
+                            title_changer = setInterval(function () {
+                                if (helper) {
+                                    $(page_title).html('Новый заказ на доставку!');
+                                    helper = false;
+                                } else {
+                                    $(page_title).html(page_title_content);
+                                    helper = true;
+                                }
+                            }, 1000);
                             return true;
                         }, null, 'message', 'chat', null, null);
                     }
@@ -100,6 +113,7 @@
         );
         document.onclick = function () {
             clearInterval(alertTimeout);
+            clearInterval(title_changer);
             audio.pause();
         };
         window.onbeforeunload = function (e) {
