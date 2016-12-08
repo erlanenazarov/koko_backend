@@ -622,6 +622,7 @@ a .order-block:hover > .order-block-icon > img {
 }
 
 .drink-preview > img {
+    max-width: 100%;
     position: absolute;
     left: 50%;
     top: 50%;
