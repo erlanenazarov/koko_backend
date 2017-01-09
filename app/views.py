@@ -34,7 +34,7 @@ def index_page(request):
         'phone': phone,
         'additional_phone': additional_phone,
         'email': email,
-        'address': address
+        'address': address,
         'time_of_work': time_of_work
     }
 
