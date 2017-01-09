@@ -1,4 +1,4 @@
-# coding=utf-8
+﻿# coding=utf-8
 import datetime
 import json
 import threading
@@ -29,11 +29,13 @@ def index_page(request):
     additional_phone = contacts.additional_phone_number
     email = contacts.email
     address = contacts.address
+    time_of_work = contacts.time_of_work
     params = {
         'phone': phone,
         'additional_phone': additional_phone,
         'email': email,
         'address': address
+        'time_of_work': time_of_work
     }
 
     if 'cart_items' in request.COOKIES:
