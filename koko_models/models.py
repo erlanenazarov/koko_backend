@@ -111,6 +111,8 @@ class Contacts(models.Model):
     additional_phone_number = models.CharField(max_length=255, verbose_name='Запасной номер телефона', null=True, blank=True)
     email = models.EmailField(verbose_name='Эл. почта')
     address = models.CharField(max_length=255, verbose_name='Адрес')
+    time_of_work = models.CharField(max_length=255, verbose_name='Chasy raboty', default='10:00 - 22:00')
+
 
     def __unicode__(self):
         return self.phone_number + ', ' + self.address
