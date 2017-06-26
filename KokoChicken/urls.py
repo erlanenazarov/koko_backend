@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^paginate$', paginate_products, name='paginate_products'),
     url(r'^cart/item/quantity', set_cart_item_quantity, name='cart_item_quantity'),
     url(r'^order/create$', create_order, name='create_order'),
+    url(r'^notifications/get$', get_notifications, name='get_notifications'),
 ]
 
 if settings.DEBUG:

@@ -1,8 +1,23 @@
 /**
  * Created by Эрлан on 25.11.2016.
  */
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
-var BOSH_SERVICE = 'http://176.126.167.36:5280/http-bind';
+
 
 $(document).ready(function () {
     $(window).on('scroll', function () {
@@ -232,7 +247,7 @@ $(document).ready(function () {
         $.ajax({
             method: 'POST',
             url: remove_from_cart_url,
-            data: {item: JSON.stringify(cart_item), csrfmiddlewaretoken: csrf},
+            data: {item: JSON.stringify(cart_item), csrfmiddlewaretoken: getCookie('csrftoken')},
             dataType: 'json',
             success: function (response) {
                 if (response.success) {
@@ -279,11 +294,14 @@ $(document).ready(function () {
     //create order
     $('#orderForm').on('submit', function (e) {
         e.preventDefault();
+        var alert = $('#alert-modal');
+        var data = $(this).serialize();
+        data += '&csrfmiddlewaretoken=' + getCookie('csrftoken');
         $.ajax({
             method: 'POST',
             url: $(this).attr('action'),
             dataType: 'json',
-            data: $(this).serialize(),
+            data: data,
             success: function (response) {
                 if (response.success) {
                     $('.md-window').addClass('close');
@@ -291,30 +309,20 @@ $(document).ready(function () {
                         $('.md-window').removeClass('close');
                     });
 
-                    var alert = $('#alert-modal');
                     $('.md-alert-title', alert).html('Заказ отправлен');
                     $('.md-alert-message', alert).html('Ваша заказ принят!');
                     $(alert).fadeIn('fast');
-
-                    connection = new Strophe.Connection(BOSH_SERVICE);
-                    connection.connect('customer@176.126.167.36', 'Afrodita97', function (status) {
-                            if (status == Strophe.Status.CONNECTED) {
-                                connection.send($pres().tree());
-                                var message = $msg({
-                                    to: 'administrator@176.126.167.36',
-                                    from: 'customer@176.126.167.36',
-                                    type: 'chat'
-                                }).c("body").t('new-order');
-                                message.up().c("data");
-                                connection.send(message);
-                            }
-                        }
-                    )
+                } else {
+                    $('.md-alert-title', alert).html('Ошибка!');
+                    $('.md-alert-message', alert).html('Похоже что сервер не отвечает, пропробуйте позже..');
+                    $(alert).fadeIn('fast');
                 }
             }
             ,
             error: function (e) {
-
+                $('.md-alert-title', alert).html('Ошибка!');
+                $('.md-alert-message', alert).html('Похоже что сервер не отвечает, пропробуйте позже..');
+                $(alert).fadeIn('fast');
             }
         });
 

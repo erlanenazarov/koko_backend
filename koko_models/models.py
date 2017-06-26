@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -107,16 +108,18 @@ class Contacts(models.Model):
         db_table = 'contacts'
         verbose_name = 'Контакты'
         verbose_name_plural = 'Контакты'
+
     phone_number = models.CharField(max_length=255, verbose_name='Номер телефона')
-    additional_phone_number = models.CharField(max_length=255, verbose_name='Запасной номер телефона', null=True, blank=True)
+    additional_phone_number = models.CharField(max_length=255, verbose_name='Запасной номер телефона', null=True,
+                                               blank=True)
     email = models.EmailField(verbose_name='Эл. почта')
     address = models.CharField(max_length=255, verbose_name='Адрес')
     time_of_work = models.CharField(max_length=255, verbose_name='Chasy raboty', default='10:00 - 22:00')
-
 
     def __unicode__(self):
         return self.phone_number + ', ' + self.address
 
 
 from koko_models.signals import post_order
+
 models.signals.post_save.connect(post_order, sender=Order)

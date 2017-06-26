@@ -316,3 +316,11 @@ def send_notification_email(title, body, to):
     email = EmailMessage(title, body=body, to=[to])
     email.content_subtype = 'html'
     email.send()
+
+
+@csrf_exempt
+def get_notifications(request):
+    orders = Order.objects.filter(accepted=False, delivered=False)
+    if orders.count() > 0:
+        return JsonResponse(dict(has=True))
+    return JsonResponse(dict(has=False))

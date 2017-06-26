@@ -81,45 +81,51 @@
     <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
     <script src="{% static "js/strophe.js" %}"></script>
     <script>
-        var BOSH_SERVICE = 'http://176.126.167.36:5280/http-bind';
         var whatsAppPath = '{% static "whatsapp.mp3" %}';
-        var connection = new Strophe.Connection(BOSH_SERVICE);
         var alertTimeout = null;
         var audio = new Audio(whatsAppPath);
         var page_title = $('title');
         var page_title_content = $(page_title).html();
         var title_changer = null;
         var helper = true;
-        connection.connect('administrator@176.126.167.36', 'Afrodita97', function (status) {
-                    if (status == Strophe.Status.CONNECTED) {
-                        connection.send($pres().tree());
-                        connection.addHandler(function (msg) {
-                            alertTimeout = setInterval(function () {
-                                audio.play();
-                            }, 3000);
-                            title_changer = setInterval(function () {
-                                if (helper) {
-                                    $(page_title).html('Новый заказ на доставку!');
-                                    helper = false;
-                                } else {
-                                    $(page_title).html(page_title_content);
-                                    helper = true;
-                                }
-                            }, 1000);
-                            return true;
-                        }, null, 'message', 'chat', null, null);
-                    }
-                }
-        );
         document.onclick = function () {
             clearInterval(alertTimeout);
             clearInterval(title_changer);
             audio.pause();
         };
-        window.onbeforeunload = function (e) {
-            if (connection) {
-                connection.disconnect();
-            }
-        };
+        var interval;
+        $(document).ready(function () {
+            interval = setInterval(function () {
+                getNotifications();
+            }, 5000);
+        });
+
+        function getNotifications() {
+            $.ajax({
+                url: '{% url 'get_notifications' %}',
+                method: 'GET',
+                dataType: 'JSON',
+                success: function (response) {
+                    if (response.has) {
+                        alertTimeout = setInterval(function () {
+                            audio.play();
+                        }, 3000);
+                        title_changer = setInterval(function () {
+                            if (helper) {
+                                $(page_title).html('Новый заказ на доставку!');
+                                helper = false;
+                            } else {
+                                $(page_title).html(page_title_content);
+                                helper = true;
+                            }
+                        }, 1000);
+                        clearInterval(interval);
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
     </script>
 {% endblock %}

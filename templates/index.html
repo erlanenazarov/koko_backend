@@ -35,7 +35,6 @@
             <div class="md-close"><img src="{% static "images/icons/close.png" %}"/></div>
             <div class="block-title">Форма доставки</div>
             <form action="{% url "create_order" %}" method="POST" id="orderForm">
-                {% csrf_token %}
                 <div class="form-group">
                     {{ order_form.name }}
                 </div>
@@ -399,5 +398,8 @@
 </script>
 <script src="{% static 'js/strophe.js' %}"></script>
 <script src="{% static 'js/core.js' %}"></script>
+<script>
+
+</script>
 </body>
 </html>
