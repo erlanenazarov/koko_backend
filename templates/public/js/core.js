@@ -179,7 +179,7 @@ $(document).ready(function () {
         var quantity = $('div.count-value', product_info).html();
         var title = $('div.title', product_info).html();
         var price = null;
-        if (type == 'potato' || type == 'chicken') {
+        if (type === 'potato' || type === 'chicken') {
             var size = $('li.active', product_info).attr('data-size');
             price = $('li.active', product_info).attr('data-price');
             cart_item = {
@@ -238,7 +238,7 @@ $(document).ready(function () {
 
         var cart_item = null;
 
-        if (type == 'potato' || type == 'chicken') {
+        if (type === 'potato' || type === 'chicken') {
             cart_item = {id: id, type: type, size: size};
         } else {
             cart_item = {id: id, type: type};
@@ -290,7 +290,8 @@ $(document).ready(function () {
     $('.cart_item_minus').click({isPlus: false}, updateCartItemPrice);
 
     var connection = null;
-
+    connection = new CHAT();
+    connection.init(socketHost, 'kokoChicken');
     //create order
     $('#orderForm').on('submit', function (e) {
         e.preventDefault();
@@ -312,6 +313,9 @@ $(document).ready(function () {
                     $('.md-alert-title', alert).html('Заказ отправлен');
                     $('.md-alert-message', alert).html('Ваша заказ принят!');
                     $(alert).fadeIn('fast');
+                    var time = new Date().getHours() + ':' + new Date().getMinutes();
+                    console.log(time);
+                    connection.sendMessage('newOrder', time);
                 } else {
                     $('.md-alert-title', alert).html('Ошибка!');
                     $('.md-alert-message', alert).html('Похоже что сервер не отвечает, пропробуйте позже..');

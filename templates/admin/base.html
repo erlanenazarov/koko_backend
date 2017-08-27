@@ -79,7 +79,8 @@
 {% block footer %}
     {{ block.super }}
     <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
-    <script src="{% static "js/strophe.js" %}"></script>
+    <script src="{% static 'socket.io/socket.io.js' %}"></script>
+    <script src="{% static 'socket.io/socket.io.chat.js' %}"></script>
     <script>
         var whatsAppPath = '{% static "whatsapp.mp3" %}';
         var alertTimeout = null;
@@ -87,45 +88,88 @@
         var page_title = $('title');
         var page_title_content = $(page_title).html();
         var title_changer = null;
-        var helper = true;
-        document.onclick = function () {
-            clearInterval(alertTimeout);
-            clearInterval(title_changer);
-            audio.pause();
-        };
-        var interval;
+        var _socket = new CHAT();
+        var helper = false;
+
         $(document).ready(function () {
-            interval = setInterval(function () {
-                getNotifications();
-            }, 5000);
+            _socket.init('http://localhost:3000', 'kokoChicken');
         });
 
-        function getNotifications() {
-            $.ajax({
-                url: '{% url 'get_notifications' %}',
-                method: 'GET',
-                dataType: 'JSON',
-                success: function (response) {
-                    if (response.has) {
-                        alertTimeout = setInterval(function () {
-                            audio.play();
-                        }, 3000);
-                        title_changer = setInterval(function () {
-                            if (helper) {
-                                $(page_title).html('Новый заказ на доставку!');
-                                helper = false;
-                            } else {
-                                $(page_title).html(page_title_content);
-                                helper = true;
-                            }
-                        }, 1000);
-                        clearInterval(interval);
-                    }
-                },
-                error: function () {
+        $(document).on('mousemove', stopNotification);
+        $(document).on('keypress', stopNotification);
+        
+        function stopNotification() {
+            if(alertTimeout && title_changer) {
+                clearInterval(alertTimeout);
+                clearInterval(title_changer);
+            }
+            audio.pause();
+        }
 
+        function getPrettyDate() {
+            var year = new Date().getFullYear();
+            var month = new Date().getMonth();
+            var day = new Date().getDate();
+
+            var hour = new Date().getHours();
+            var minute = new Date().getMinutes();
+
+            var result = day + ' ';
+
+            switch (month) {
+                case 1: result += 'Января'; break;
+                case 2: result += 'Февраля'; break;
+                case 3: result += 'Марта'; break;
+                case 4: result += 'Апреля'; break;
+                case 5: result += 'Майя'; break;
+                case 6: result += 'Июня'; break;
+                case 7: result += 'Июля'; break;
+                case 8: result += 'Августа'; break;
+                case 9: result += 'Сентября'; break;
+                case 10: result += 'Октября'; break;
+                case 11: result += 'Ноября'; break;
+                case 12: result += 'Декабря'; break;
+            }
+
+            result += ', ' + year + ' в ';
+
+            result += hour < 10 ? '0' + hour : hour;
+
+            result += ':';
+
+            result += minute < 10 ? '0' + minute : minute;
+
+            return result;
+        }
+
+        function onChatMessageCallback(data) {
+            var time = getPrettyDate();
+
+            title_changer = setInterval(function () {
+                if(!helper) {
+                    page_title.html('Новый заказ!');
+                    helper = true;
+                } else {
+                    page_title.html(page_title_content);
+                    helper = false;
                 }
-            });
+            }, 1000);
+
+            alertTimeout = setInterval(function () {
+                audio.play();
+            }, 3000);
+
+            var options = {
+                body: time + ' поступил новый заказ! Срочно обновите страницу!',
+                icon: '{% static 'images/logo.png' %}'
+            };
+            var n = new Notification('Новый заказ!', options);
+
+            n.onclick = function (e) {
+                e.preventDefault();
+                window.focus();
+                n.close();
+            }
         }
     </script>
 {% endblock %}

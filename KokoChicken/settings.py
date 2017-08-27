@@ -25,9 +25,9 @@ _PATH = os.path.abspath(os.path.dirname(__file__))
 SECRET_KEY = 's7m791be+n*@3+4990he0!blp*k1x%liq#!1j*c%shxk=34rvp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = IS_DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -150,3 +150,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = EMAIL_USER
 EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
 EMAIL_PORT = 587
+
+
+SOCKET_HOST = 'http://localhost:3000' if DEBUG else 'http://koko.kg:3000'

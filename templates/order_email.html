@@ -1,26 +1,74 @@
-<p>Заказ №{{ id }}</p>
-<p>Имя: {{ name }}</p>
-<p>Адрес: {{ address }}</p>
-<p>Телефон: {{ phone }}</p>
-<p>Итого: {{ score }}</p>
+<html>
+<head>
+    <title>Новый заказ на сайте KokoChicken</title>
+    <style>
+        table {
+            width: 100%;
+            -webkit-box-shadow: 1px 2px 15px 2px rgba(0,0,0,0.5);
+            -moz-box-shadow: 1px 2px 15px 2px rgba(0,0,0,0.5);
+            box-shadow: 1px 2px 15px 2px rgba(0,0,0,0.5);
+            padding: 10px;
+        }
+
+        div.info-div {
+            width: 80%;
+            margin: 0 auto 20px auto;
+
+            -webkit-box-shadow: 1px 2px 15px 2px rgba(0,0,0,0.5);
+            -moz-box-shadow: 1px 2px 15px 2px rgba(0,0,0,0.5);
+            box-shadow: 1px 2px 15px 2px rgba(0,0,0,0.5);
+
+            border: 1px solid #0a68a3;
+
+            padding: 5px;
+        }
+
+        p {
+            padding-left: 10px;
+            border-bottom: 1px solid #0a68a3;
+        }
+
+        thead td {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #0a68a3;
+        }
+
+        tbody td {
+            border: 1px solid #0a68a3;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="info-div">
+    <p>Заказ №{{ id }}</p>
+    <p>Имя: {{ name }}</p>
+    <p>Адрес: {{ address }}</p>
+    <p>Телефон: <a href="tel:{{ phone }}">{{ phone }}</a></p>
+    <p>Итого: {{ score }}</p>
+</div>
 
 <table>
     <thead>
-        <tr>
-            <td>Наименование</td>
-            <td>Объем</td>
-            <td>Количество</td>
-            <td>Стоимость</td>
-        </tr>
+    <tr>
+        <td>Наименование</td>
+        <td>Объем</td>
+        <td>Количество</td>
+        <td>Стоимость</td>
+    </tr>
     </thead>
     <tbody>
-        {% for item in cart_items %}
-            <tr>
-                <td>{{ item.title }}</td>
-                <td>{% if item.size%} {{ item.size }} {% endif %}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.price }}</td>
-            </tr>
-        {% endfor %}
+    {% for item in cart_items %}
+        <tr>
+            <td>{{ item.title }}</td>
+            <td>{% if item.size %} {{ item.size }} {% endif %}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.price }}</td>
+        </tr>
+    {% endfor %}
     </tbody>
 </table>
+</body>
+</html>
