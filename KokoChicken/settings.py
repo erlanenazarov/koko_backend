@@ -152,4 +152,4 @@ EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
 EMAIL_PORT = 587
 
 
-SOCKET_HOST = 'http://localhost:3000' if DEBUG else 'http://koko.kg:3000'
+SOCKET_HOST = 'http://localhost:3001' if DEBUG else 'http://koko.kg:3001'
