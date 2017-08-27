@@ -35,7 +35,8 @@ def index_page(request):
         'additional_phone': additional_phone,
         'email': email,
         'address': address,
-        'time_of_work': time_of_work
+        'time_of_work': time_of_work,
+        'socket_host': settings.SOCKET_HOST
     }
 
     if 'cart_items' in request.COOKIES:
