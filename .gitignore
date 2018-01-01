@@ -21,3 +21,5 @@ tests/report/
 static/
 KokoChicken/parameters.py
 koko_backup.sql
+
+.env/
