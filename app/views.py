@@ -294,7 +294,9 @@ def create_order(request):
             thread = threading.Thread(target=send_notification_email, args=('Новый заказ', t_content, EMAIL_TO))
             thread.start()
 
-            return JsonResponse(dict(success=True))
+            response = JsonResponse(dict(success=True))
+
+            return set_cookie(response, 'cart_items', json.dumps([]))
 
         return JsonResponse(dict(success=False))
     else:
