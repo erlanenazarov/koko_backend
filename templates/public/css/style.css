@@ -1335,6 +1335,7 @@ footer > img {
     left: 50%;
     bottom: 1px;
     transform: translate(-50%, 0);
+    display: none;
 }
 
 .important-invisible-text {
